@@ -38,7 +38,11 @@ function ReviewOperations({ review, deleteTodoReview, setIsEditing }) {
       <button>
         <BsTrash3
           onClick={() =>
-            deleteTodoReview({ id: review.id, recipeId: review.recipeId })
+            deleteTodoReview({
+              id: review.id,
+              recipeId: review.recipeId,
+              image: review.image,
+            })
           }
         />
       </button>

@@ -11,34 +11,69 @@ function AddReviewModal({
   userRecipe = null,
   todoExists = false,
   todoId = null,
+  todoImage = null,
 }) {
   const { user } = useCurrentUser();
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, reset } = useForm({
     defaultValues: userRecipe ? userRecipe : {},
   });
   const { isAdding, addReview } = useAddReview({ userId: user.id });
+  const [keepOldPhoto, setKeepOldPhoto] = useState(todoExists);
   const { errors } = formState;
   const navigate = useNavigate();
   function onSubmit(data) {
     //if !todoExists then we need add this recipe to the supabase database
-    addReview(
-      {
-        review: {
-          userId: user.id,
-          status: "review",
-          recipeId: userRecipe.id,
-          favourite: data.favourite,
-          stars: Number(data.stars),
-          notes: data.notes,
-          id: todoId,
+    if (!todoExists) {
+      addReview(
+        {
+          recipe: {
+            title: data.title,
+            sourceUrl: data.sourceUrl,
+            sourceName: data.sourceName,
+            isSpoontacularRecipe: false,
+          },
+          review: {
+            userId: user.id,
+            status: "review",
+            favourite: data.favourite,
+            stars: Number(data.stars),
+            notes: data.notes,
+            image: data.image,
+          },
+          todoExists,
+          keepOldPhoto,
         },
-        todoExists,
-      },
-      {
-        onSuccess: () => navigate("/reviews"),
-      }
-    );
+        {
+          onSuccess: () => {
+            reset();
+            setModalIsOpen(false);
+          },
+        }
+      );
+    }
+    if (todoExists) {
+      addReview(
+        {
+          review: {
+            userId: user.id,
+            status: "review",
+            recipeId: userRecipe.id,
+            favourite: data.favourite,
+            stars: Number(data.stars),
+            notes: data.notes,
+            id: todoId,
+            image: keepOldPhoto ? todoImage : data.image,
+          },
+          todoExists,
+          keepOldPhoto,
+          todoOldImage: todoImage,
+        },
+        {
+          onSuccess: () => navigate("/reviews"),
+        }
+      );
+    }
   }
   return (
     <>
@@ -52,7 +87,13 @@ function AddReviewModal({
       {modalIsOpen && (
         <div className="fixed top-0 left-0 w-screen h-screen backdrop-blur-sm">
           <div className="fixed bg-orange-100 top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%] p-4 w-5/6">
-            <button onClick={() => setModalIsOpen(false)} className="">
+            <button
+              onClick={() => {
+                reset();
+                setModalIsOpen(false);
+              }}
+              className=""
+            >
               X
             </button>
             <Heading title="Add Review" />
@@ -70,15 +111,32 @@ function AddReviewModal({
                   })}
                 />
               </FormRow>
-              <FormRow label="image" error={errors?.image?.message}>
-                <input
-                  id="image"
-                  disabled={isAdding || todoExists}
-                  {...register("image", {
-                    required: "this field is required",
-                  })}
-                />
-              </FormRow>
+              {todoExists && (
+                <select
+                  value={keepOldPhoto}
+                  onChange={(e) => {
+                    setKeepOldPhoto(e.target.value === "true");
+                  }}
+                >
+                  <option value={true}>Keep old photo</option>
+                  <option value={false}>add new photo photo</option>
+                </select>
+              )}
+              {keepOldPhoto ? (
+                <span className="overflow-scroll">image {todoImage}</span>
+              ) : (
+                <FormRow label="image" error={errors?.image?.message}>
+                  <input
+                    id="image"
+                    accept={keepOldPhoto ? "" : "image/*"}
+                    type={keepOldPhoto ? "text" : "file"}
+                    disabled={isAdding || keepOldPhoto}
+                    {...register("image", {
+                      required: keepOldPhoto ? false : "this field is required",
+                    })}
+                  />
+                </FormRow>
+              )}
               <FormRow label="sourceUrl" error={errors?.sourceUrl?.message}>
                 <input
                   id="sourceUrl"
@@ -126,7 +184,11 @@ function AddReviewModal({
                 />
               </FormRow>
               <FormRow label="notes" error={errors?.notes?.message}>
-                <input id="notes" disabled={isAdding} {...register("notes")} />
+                <textarea
+                  id="notes"
+                  disabled={isAdding}
+                  {...register("notes")}
+                />
               </FormRow>
               <button className="hover:bg-orange-200 bg-orange-300 text-orange-900 p-2 rounded-full">
                 Add to Reviews

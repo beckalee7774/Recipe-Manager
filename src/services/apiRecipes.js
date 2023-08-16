@@ -1,5 +1,5 @@
 //api requests to spoontacular api
-const APIKEY = "Confidential";
+const APIKEY = "confidential";
 export async function searchRecipes({ search, searchByIngredients }) {
   var searchString = search.replace(" ", "&");
   var fetchString = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&query=${searchString}`;

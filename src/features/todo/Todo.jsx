@@ -12,6 +12,7 @@ function Todo({ todo }) {
   const { isLoading, userRecipe } = useUserRecipe({
     recipeId: todo.recipeId,
   });
+  console.log(todo);
   const { isDeleting, deleteTodoReview } = useDeleteTodoReview({
     userId: user.id,
   });
@@ -19,7 +20,7 @@ function Todo({ todo }) {
   return (
     <li className="text-sm mb-3">
       <div className="flex gap-2 items-center justify-around">
-        <img src={userRecipe.image} alt={userRecipe.title} className="w-16" />
+        <img src={todo.image} alt={userRecipe.title} className="w-16" />
         <div className="flex flex-col">
           <span className="font-semibold">{userRecipe.title}</span>
           <RecipeLink
@@ -27,23 +28,30 @@ function Todo({ todo }) {
             sourceName={userRecipe.sourceName}
             size="xxs"
           />
-          <Link
-            className="text-[0.5rem] font-semibold hover:text-orange-400"
-            to={`/recipe/${userRecipe.id}`}
-          >
-            Link to recipe details &rarr;
-          </Link>
+          {userRecipe.isSpoontacularRecipe && (
+            <Link
+              className="text-[0.5rem] font-semibold hover:text-orange-400"
+              to={`/recipe/${userRecipe.id}`}
+            >
+              Link to recipe details &rarr;
+            </Link>
+          )}
         </div>
         <div className="flex flex-col gap-1">
           <AddReviewModal
             userRecipe={userRecipe}
             todoExists={true}
             todoId={todo.id}
+            todoImage={todo.image}
           />
           <button
             onClick={(e) => {
               e.preventDefault();
-              deleteTodoReview({ id: todo.id, recipeId: todo.recipeId });
+              deleteTodoReview({
+                id: todo.id,
+                recipeId: todo.recipeId,
+                image: todo.image,
+              });
             }}
             className="text-[0.5rem] flex items-center gap-1 bg-red-100 text-red-700 px-1 rounded-full dark:bg-red-800 dark:text-red-200"
           >

@@ -49,7 +49,7 @@ function Review({ review }) {
   return (
     <li className="text-sm mb-3">
       <div className="flex gap-2 items-center justify-around">
-        <img src={userRecipe.image} alt={userRecipe.title} className="w-16" />
+        <img src={review.image} alt={userRecipe.title} className="w-16" />
         <div
           className={layoutStringSidebar.concat(" flex sm:gap-3 sm:flex-row")}
         >
@@ -67,12 +67,14 @@ function Review({ review }) {
               sourceName={userRecipe.sourceName}
               size="xxs"
             />
-            <Link
-              className="text-[0.5rem] font-semibold hover:text-orange-400"
-              to={`recipe/${userRecipe.id}`}
-            >
-              Link to recipe details &rarr;
-            </Link>
+            {userRecipe.isSpoontacularRecipe && (
+              <Link
+                className="text-[0.5rem] font-semibold hover:text-orange-400"
+                to={`/recipe/${userRecipe.id}`}
+              >
+                Link to recipe details &rarr;
+              </Link>
+            )}
           </div>
         </div>
         <ReviewOperations

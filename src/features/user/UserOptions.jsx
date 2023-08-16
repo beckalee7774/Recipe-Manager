@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsSun, BsFillMoonFill } from "react-icons/bs";
 import { useCurrentUser } from "../../contexts/UserContext";
+import DeleteAccount from "./DeleteAccount";
 import FormRow from "../../ui/FormRow";
 import Spinner from "../../ui/Spinner";
 import { useUpdateUser } from "./useUpdateUser";
@@ -38,14 +39,14 @@ function UserOptions() {
     }
   }
   return (
-    <>
+    <div className="relative">
       <button
         onClick={handleDarkMode}
-        className="dark:bg-orange-400 bg-orange-800 text-orange-200 p-2 rounded-full hover:bg-orange-700 absolute top-12 right-2"
+        className="dark:bg-orange-400 bg-orange-800 text-orange-200 p-2 rounded-full hover:bg-orange-700 absolute top-[-40px] right-2"
       >
         {darkmode ? <BsSun /> : <BsFillMoonFill />}
       </button>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="bg-orange-100 p-3">
         <div className="flex flex-col gap-3 mb-4 ">
           <FormRow label="name">
             <input
@@ -57,6 +58,7 @@ function UserOptions() {
           <FormRow label="username">
             <input
               id="username"
+              minLength={5}
               className="p-1 rounded-full dark:text-orange-800"
               {...register("username")}
             />
@@ -79,7 +81,7 @@ function UserOptions() {
             </FormRow>
             <button
               onClick={handleReset}
-              className="text-xs dark:bg-orange-600 bg-orange-100 px-2 py-1 rounded-full hover:bg-orange-300 dark:hover:bg-orange-700"
+              className="text-xs dark:bg-orange-600 bg-orange-200 px-2 py-1 rounded-full hover:bg-orange-300 dark:hover:bg-orange-700"
             >
               Reset
             </button>
@@ -89,7 +91,8 @@ function UserOptions() {
           submit changes
         </button>
       </form>
-    </>
+      <DeleteAccount />
+    </div>
   );
 }
 

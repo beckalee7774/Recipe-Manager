@@ -4,12 +4,12 @@ function UserProvider({ children }) {
   const storedUser = localStorage.getItem("user");
   const [user, setUser] = useState(JSON.parse(storedUser));
   let isLoggedIn = user === null || user?.username === "none" ? false : true;
-  function setUseLocalStorage(userObj) {
+  function setUserLocalStorage(userObj) {
     localStorage.setItem("user", JSON.stringify(userObj));
     setUser(userObj);
   }
   return (
-    <UserContext.Provider value={{ isLoggedIn, user, setUseLocalStorage }}>
+    <UserContext.Provider value={{ isLoggedIn, user, setUserLocalStorage }}>
       {children}
     </UserContext.Provider>
   );

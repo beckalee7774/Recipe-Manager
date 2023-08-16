@@ -3,11 +3,11 @@ import { toast } from "react-hot-toast";
 import { useCurrentUser } from "../../contexts/UserContext";
 import { checkUserExists } from "../../services/apiUserRecipes";
 
-export function useLogin({ userData }) {
+export function useLogin({ userData, setIsRefetching2 }) {
   const queryClient = useQueryClient();
-  const { setUseLocalStorage } = useCurrentUser();
+  const { setUserLocalStorage } = useCurrentUser();
   const {
-    isLoading,
+    isRefetching,
     data: user,
     refetch,
   } = useQuery({
@@ -16,10 +16,11 @@ export function useLogin({ userData }) {
     enabled: false,
     onSuccess: (userObj) => {
       toast.success("Logged in");
-      setUseLocalStorage(userObj);
+      setUserLocalStorage(userObj);
       queryClient.invalidateQueries({
         queryKey: ["login", userData.username],
       });
+      setIsRefetching2(false);
     },
     onError: (e) => {
       if (e.message === "no such user exists") {
@@ -27,7 +28,8 @@ export function useLogin({ userData }) {
       } else {
         toast.error("error logging in user");
       }
+      setIsRefetching2(false);
     },
   });
-  return { isLoading, user, refetch };
+  return { isRefetching, user, refetch };
 }

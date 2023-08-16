@@ -1,4 +1,4 @@
-import supabase from "./supabase";
+import supabase, { supabaseUrl } from "./supabase";
 
 //api requests to supabase database
 export async function getUserReviews({ userId }) {
@@ -42,80 +42,170 @@ export async function getUserRecipe({ recipeId }) {
 }
 
 export async function addTodo({ recipeId, recipe, todo }) {
-  //first check if the user has already added this recipe to their todo list
-  let { data: dataUserRecipeCheck, error: errorUserRecipeCheck } =
-    await supabase
-      .from("user-recipes")
+  const isSpoontacularRecipe = recipeId !== null;
+
+  if (isSpoontacularRecipe) {
+    //first check if the user has already added this recipe to their todo list
+    let { data: dataUserRecipeCheck, error: errorUserRecipeCheck } =
+      await supabase
+        .from("user-recipes")
+        .select("*")
+        .eq("recipeId", recipeId)
+        .eq("userId", todo.userId);
+    if (errorUserRecipeCheck) {
+      throw new Error(errorUserRecipeCheck);
+    }
+    if (dataUserRecipeCheck[0]) {
+      throw new Error("Error Duplicate");
+    }
+
+    //check if recipe alredy exists in recipe database
+    let { data: dataRecipe, error: errorRecipe } = await supabase
+      .from("recipes")
       .select("*")
-      .eq("recipeId", recipeId)
-      .eq("userId", todo.userId);
-  if (errorUserRecipeCheck) {
-    throw new Error(errorUserRecipeCheck);
-  }
-  if (dataUserRecipeCheck[0]) {
-    throw new Error("Error Duplicate");
-  }
+      .eq("id", recipeId);
+    if (errorRecipe) throw new Error("error checking if recipe is in database");
 
-  //check if recipe alredy exists in recipe database
-  let { data: dataRecipe, error: errorRecipe } = await supabase
-    .from("recipes")
-    .select("*")
-    .eq("id", recipeId);
-  if (errorRecipe) throw new Error("error checking if recipe is in database");
+    if (dataRecipe.length === 0) {
+      //if not add to the database
+      const { data, error } = await supabase
+        .from("recipes")
+        .insert([{ ...recipe }])
+        .select();
 
-  if (dataRecipe.length === 0) {
-    //if not add to the database
+      if (error) {
+        console.log(error);
+        throw new Error("error adding todo recipe to databse");
+      }
+    }
+
+    //add todo to database now that recipe is definitely in the database
+    const { data, error } = await supabase
+      .from("user-recipes")
+      .insert([{ ...todo }])
+      .select();
+
+    if (error) {
+      console.log(error);
+      throw new Error("error adding todo recipe");
+    }
+    return data;
+  } else {
+    //this recipe is not a spoontacular recipe
+    //insert recipe
     const { data, error } = await supabase
       .from("recipes")
       .insert([{ ...recipe }])
       .select();
-
     if (error) {
       console.log(error);
-      throw new Error("error adding todo recipe to databse");
+      throw new Error("error adding todo recipe");
     }
+    //upload image
+    const image = todo.image[0];
+    const imageName = `${Math.random()}-${image.name}`?.replaceAll?.("/", "");
+    const imagePath = `${supabaseUrl}/storage/v1/object/public/recipe-images/${imageName}`;
+    const { error: storageError } = await supabase.storage
+      .from("recipe-images")
+      .upload(imageName, image);
+    if (storageError) throw new Error("could not upload image");
+    //insert new row in user-recipes
+    const { data: data2, error: error2 } = await supabase
+      .from("user-recipes")
+      .insert([{ ...todo, recipeId: data[0].id, image: imagePath }])
+      .select();
+    if (error2) {
+      console.log(error2);
+      throw new Error("error adding todo recipe");
+    }
+    return data2;
   }
-
-  //add todo to database now that recipe is definitely in the database
-  const { data, error } = await supabase
-    .from("user-recipes")
-    .insert([{ ...todo }])
-    .select();
-
-  if (error) {
-    console.log(error);
-    throw new Error("error adding todo recipe");
-  }
-  return data;
 }
 
-export async function addReview({ review, todoExists }) {
-  console.log(review);
-  console.log(todoExists);
+export async function addReview({
+  recipe,
+  review,
+  todoExists,
+  keepOldPhoto,
+  todoOldImage,
+}) {
   if (todoExists) {
-    //update current todo row
-    const { data, error } = await supabase
-      .from("user-recipes")
-      .update({ ...review })
-      .eq("id", review.id)
-      .select();
-    if (error) {
-      console.log(error);
-      throw new Error("error adding review recipe");
+    if (!keepOldPhoto) {
+      // we want to add a new photo to our review and update todo to review
+      const image = review.image[0];
+      const imageName = `${Math.random()}-${image.name}`?.replaceAll?.("/", "");
+      const imagePath = `${supabaseUrl}/storage/v1/object/public/recipe-images/${imageName}`;
+
+      //upload image
+      const { error: storageError } = await supabase.storage
+        .from("recipe-images")
+        .upload(imageName, image);
+      if (storageError) throw new Error(storageError);
+
+      //if old image is stored in a supabase bucket then we should delete it
+      const toDeleteString = `${supabaseUrl}/storage/v1/object/public/recipe-images/`;
+      const imageName2 = todoOldImage.replace(toDeleteString, "");
+      if (todoOldImage?.startsWith?.(supabaseUrl)) {
+        const { error: storageError2 } = await supabase.storage
+          .from("recipe-images")
+          .remove([imageName2]);
+        if (storageError2) throw new Error(storageError2);
+      }
+
+      //update current todo row
+      const { data, error } = await supabase
+        .from("user-recipes")
+        .update({ ...review, image: imagePath })
+        .eq("id", review.id)
+        .select();
+      if (error) {
+        console.log(error);
+        throw new Error("error adding review recipe");
+      }
+      return data;
+    } else {
+      //keep old photo
+      //update current todo row
+      const { data, error } = await supabase
+        .from("user-recipes")
+        .update({ ...review })
+        .eq("id", review.id)
+        .select();
+      if (error) {
+        console.log(error);
+        throw new Error("error adding review recipe");
+      }
+      return data;
     }
-    return data;
   } else {
+    //todo does not exists so we want to insert into both recipes and user-recipes
     //insert new row in recipes
-    //insert new row in user-recipes
     const { data, error } = await supabase
-      .from("user-recipes")
-      .insert([{ ...review }])
+      .from("recipes")
+      .insert([{ ...recipe }])
       .select();
     if (error) {
       console.log(error);
       throw new Error("error adding review recipe");
     }
-    return data;
+    //upload image
+    const image = review.image[0];
+    const imageName = `${Math.random()}-${image.name}`?.replaceAll?.("/", "");
+    const imagePath = `${supabaseUrl}/storage/v1/object/public/recipe-images/${imageName}`;
+    const { error: storageError } = await supabase.storage
+      .from("recipe-images")
+      .upload(imageName, image);
+    if (storageError) throw new Error("could not upload image");
+    //insert new row in user-recipes
+    const { data: data2, error: error2 } = await supabase
+      .from("user-recipes")
+      .insert([{ ...review, recipeId: data[0].id, image: imagePath }])
+      .select();
+    if (error2) {
+      console.log(error2);
+      throw new Error("error adding review recipe");
+    }
+    return data2;
   }
 }
 
@@ -131,7 +221,7 @@ export async function addReview({ review, todoExists }) {
 //   return data[0];
 // }
 
-export async function deleteTodoReview({ id, recipeId }) {
+export async function deleteTodoReview({ id, recipeId, image }) {
   //delete todo/review
   const { data, error } = await supabase
     .from("user-recipes")
@@ -141,6 +231,18 @@ export async function deleteTodoReview({ id, recipeId }) {
   if (error) {
     console.log(error);
     throw new Error("error deleting");
+  }
+  //if this image is stored in a supabase bucket then we should delete it
+  const toDeleteString = `${supabaseUrl}/storage/v1/object/public/recipe-images/`;
+  const imageName = image.replace(toDeleteString, "");
+  if (image?.startsWith?.(supabaseUrl)) {
+    const { error: storageError } = await supabase.storage
+      .from("recipe-images")
+      .remove([imageName]);
+    if (storageError) {
+      console.log("here2");
+      throw new Error(storageError);
+    }
   }
   //check how many other users use this recipe
   const { data: recipes, error: errorRecipe } = await supabase
@@ -191,15 +293,42 @@ export async function updateFavourite({ id, favourite }) {
   return data;
 }
 
+//used for sign ups
 export async function addUser({ user }) {
-  const { data, error } = await supabase
+  //check if username exists
+  let { data: users, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("username", user.username);
+
+  if (error) {
+    throw new Error("error signing up user");
+  }
+  if (users.length > 0) {
+    throw new Error("username is already taken");
+  }
+
+  //if username does not exist then add this user
+  const { data: users2, error: error2 } = await supabase
     .from("users")
     .insert([{ ...user }])
     .select();
 
-  if (error) {
-    console.log(error);
+  if (error2) {
+    console.log(error2);
     throw new Error("error signing up user");
+  }
+  return users2[0];
+}
+
+export async function deleteUser({ userId }) {
+  const { data, error } = await supabase
+    .from("users")
+    .delete()
+    .eq("id", userId);
+
+  if (error) {
+    throw new Error("error deleting user");
   }
   return data;
 }
@@ -229,6 +358,9 @@ export async function updateUser({ user, userId }) {
     .from("users")
     .select("*")
     .eq("username", user.username);
+  if (error) {
+    throw new Error("error updating user");
+  }
 
   users.forEach(function (user) {
     if (user.id !== userId) {
@@ -236,17 +368,16 @@ export async function updateUser({ user, userId }) {
     }
   });
 
-  //is username is not taken then update this user
+  //if username is not taken then update this user
   const { data, error: error2 } = await supabase
     .from("users")
     .update({ ...user })
     .eq("id", userId)
     .select();
 
-  if (error) {
-    console.log(error);
+  if (error2) {
+    console.log(error2);
     throw new Error("error updating user");
   }
-  console.log(data);
   return data[0];
 }

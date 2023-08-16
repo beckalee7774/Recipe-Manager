@@ -9,7 +9,12 @@ function ReviewList() {
   if (isLoading) return <Spinner />;
   if (reviews.length === 0)
     return (
-      <h1 className="text-center">You have no recipes in your reviews list</h1>
+      <div className="flex flex-col items-center gap-2">
+        <h1 className="text-center">
+          You have no recipes in your reviews list
+        </h1>
+        <AddReviewModal />
+      </div>
     );
   return (
     <>

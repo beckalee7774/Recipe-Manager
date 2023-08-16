@@ -23,10 +23,10 @@ function RecipeDetails() {
         recipe: {
           id: recipeInfo.id,
           title: recipeInfo.title,
-          image: recipeInfo.image,
           sourceUrl: recipeInfo.sourceUrl,
           sourceName: recipeInfo.sourceName,
           healthScore: recipeInfo.healthScore,
+          isSpoontacularRecipe: true,
         },
         todo: {
           favourite: false,
@@ -35,6 +35,7 @@ function RecipeDetails() {
           status: "todo",
           userId: user.id,
           recipeId: recipeInfo.id,
+          image: recipeInfo.image,
         },
       },
       {

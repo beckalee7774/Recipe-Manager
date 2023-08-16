@@ -1,20 +1,29 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../contexts/UserContext";
 import FormRow from "../../ui/FormRow";
+import Spinner from "../../ui/Spinner";
 import { useLogin } from "./useLogin";
 
 function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { refetch } = useLogin({
+  const [isRefetching2, setIsRefetching2] = useState(false);
+  const { isRefetching, refetch } = useLogin({
     userData: {
       username,
       password,
     },
+    setIsRefetching2,
   });
-
+  useEffect(
+    function () {
+      setIsRefetching2(isRefetching);
+    },
+    [isRefetching]
+  );
   const { isLoggedIn } = useCurrentUser();
   useEffect(
     function () {
@@ -27,7 +36,11 @@ function LoginForm() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (!username || !password) {
+      toast.error("Enter both username and password");
+    }
     refetch();
+    setIsRefetching2(true);
   }
   return (
     <>
@@ -49,10 +62,10 @@ function LoginForm() {
           />
         </FormRow>
         <button
-          // disabled={isLoading}
-          className="bg-orange-100 py-1 px-2 rounded-full uppercase font-semibold text-align"
+          disabled={isRefetching2}
+          className="bg-orange-800 py-1 px-2 rounded-full uppercase font-semibold text-align text-orange-200 hover:bg-orange-700"
         >
-          Login
+          {isRefetching2 ? <Spinner /> : "Login"}
         </button>
       </form>
     </>

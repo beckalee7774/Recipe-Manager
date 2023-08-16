@@ -5,9 +5,9 @@ import { useCurrentUser } from "../contexts/UserContext";
 function Header() {
   const { sidebarIsOpen, setSidebarIsOpen } = useSidebar();
   const { user } = useCurrentUser();
-  const { setUseLocalStorage } = useCurrentUser();
+  const { setUserLocalStorage } = useCurrentUser();
   function logout() {
-    setUseLocalStorage({
+    setUserLocalStorage({
       username: "none",
       password: "none",
     });
@@ -20,7 +20,7 @@ function Header() {
           <BsList />
         </button>
       )}
-      <span>Header</span>
+      <span>Recipe Manager</span>
       <span>{user?.username}</span>
       <button
         onClick={logout}

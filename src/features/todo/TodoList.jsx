@@ -1,5 +1,6 @@
 import { useCurrentUser } from "../../contexts/UserContext";
 import Spinner from "../../ui/Spinner";
+import AddTodoModal from "./AddTodoModal";
 import Todo from "./Todo";
 import { useTodos } from "./useTodos";
 
@@ -16,6 +17,9 @@ function TodoList() {
       {todos.map((todo) => (
         <Todo todo={todo} key={todo.id} />
       ))}
+      <li>
+        <AddTodoModal />
+      </li>
     </ul>
   );
 }
