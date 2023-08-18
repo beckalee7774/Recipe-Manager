@@ -1,13 +1,16 @@
 import supabase, { supabaseUrl } from "./supabase";
 
 //api requests to supabase database
-export async function getUserReviews({ userId }) {
+export async function getUserReviews({ userId, sortby }) {
+  const sortbyValue =
+    sortby === "recent" || !sortby || sortby === "none" ? "created_at" : sortby;
+  const ascending = sortby === "none" || !sortby ? true : false;
   let { data: userRecipes, error } = await supabase
     .from("user-recipes")
     .select("*")
     .eq("status", "review")
     .eq("userId", userId)
-    .order("created_at", { ascending: true });
+    .order(sortbyValue, { ascending: ascending });
   if (error) {
     console.log(error);
     throw new Error("error getting user Reviews");
@@ -102,17 +105,19 @@ export async function addTodo({ recipeId, recipe, todo }) {
       throw new Error("error adding todo recipe");
     }
     //upload image
-    const image = todo.image[0];
-    const imageName = `${Math.random()}-${image.name}`?.replaceAll?.("/", "");
+    const image = todo?.image?.[0];
+    const imageName = `${Math.random()}-${image?.name}`?.replaceAll?.("/", "");
     const imagePath = `${supabaseUrl}/storage/v1/object/public/recipe-images/${imageName}`;
-    const { error: storageError } = await supabase.storage
-      .from("recipe-images")
-      .upload(imageName, image);
-    if (storageError) throw new Error("could not upload image");
+    if (image) {
+      await uploadImage(imageName, image);
+      todo.image = imagePath;
+    } else {
+      todo.image = null;
+    }
     //insert new row in user-recipes
     const { data: data2, error: error2 } = await supabase
       .from("user-recipes")
-      .insert([{ ...todo, recipeId: data[0].id, image: imagePath }])
+      .insert([{ ...todo, recipeId: data[0].id }])
       .select();
     if (error2) {
       console.log(error2);
@@ -132,30 +137,25 @@ export async function addReview({
   if (todoExists) {
     if (!keepOldPhoto) {
       // we want to add a new photo to our review and update todo to review
-      const image = review.image[0];
-      const imageName = `${Math.random()}-${image.name}`?.replaceAll?.("/", "");
+      const image = review?.image?.[0];
+      const imageName = `${Math.random()}-${image?.name}`?.replaceAll?.(
+        "/",
+        ""
+      );
       const imagePath = `${supabaseUrl}/storage/v1/object/public/recipe-images/${imageName}`;
-
-      //upload image
-      const { error: storageError } = await supabase.storage
-        .from("recipe-images")
-        .upload(imageName, image);
-      if (storageError) throw new Error(storageError);
-
-      //if old image is stored in a supabase bucket then we should delete it
-      const toDeleteString = `${supabaseUrl}/storage/v1/object/public/recipe-images/`;
-      const imageName2 = todoOldImage.replace(toDeleteString, "");
-      if (todoOldImage?.startsWith?.(supabaseUrl)) {
-        const { error: storageError2 } = await supabase.storage
-          .from("recipe-images")
-          .remove([imageName2]);
-        if (storageError2) throw new Error(storageError2);
+      if (image) {
+        await uploadImage(imageName, image);
+        review.image = imagePath;
+      } else {
+        review.image = null;
       }
+      //if old image is stored in a supabase bucket then we should delete it
+      await deleteOldImage(todoOldImage);
 
       //update current todo row
       const { data, error } = await supabase
         .from("user-recipes")
-        .update({ ...review, image: imagePath })
+        .update({ ...review })
         .eq("id", review.id)
         .select();
       if (error) {
@@ -189,17 +189,19 @@ export async function addReview({
       throw new Error("error adding review recipe");
     }
     //upload image
-    const image = review.image[0];
-    const imageName = `${Math.random()}-${image.name}`?.replaceAll?.("/", "");
+    const image = review?.image?.[0];
+    const imageName = `${Math.random()}-${image?.name}`?.replaceAll?.("/", "");
     const imagePath = `${supabaseUrl}/storage/v1/object/public/recipe-images/${imageName}`;
-    const { error: storageError } = await supabase.storage
-      .from("recipe-images")
-      .upload(imageName, image);
-    if (storageError) throw new Error("could not upload image");
+    if (image) {
+      await uploadImage(imageName, image);
+      review.image = imagePath;
+    } else {
+      review.image = null;
+    }
     //insert new row in user-recipes
     const { data: data2, error: error2 } = await supabase
       .from("user-recipes")
-      .insert([{ ...review, recipeId: data[0].id, image: imagePath }])
+      .insert([{ ...review, recipeId: data[0].id }])
       .select();
     if (error2) {
       console.log(error2);
@@ -234,13 +236,12 @@ export async function deleteTodoReview({ id, recipeId, image }) {
   }
   //if this image is stored in a supabase bucket then we should delete it
   const toDeleteString = `${supabaseUrl}/storage/v1/object/public/recipe-images/`;
-  const imageName = image.replace(toDeleteString, "");
+  const imageName = image?.replace(toDeleteString, "");
   if (image?.startsWith?.(supabaseUrl)) {
     const { error: storageError } = await supabase.storage
       .from("recipe-images")
       .remove([imageName]);
     if (storageError) {
-      console.log("here2");
       throw new Error(storageError);
     }
   }
@@ -266,10 +267,20 @@ export async function deleteTodoReview({ id, recipeId, image }) {
   return data;
 }
 
-export async function updateNotes({ id, notes }) {
+export async function updateReview({ review, id, oldImage }) {
+  const image = review?.image?.[0];
+  const imageName = `${Math.random()}-${image?.name}`?.replaceAll?.("/", "");
+  const imagePath = `${supabaseUrl}/storage/v1/object/public/recipe-images/${imageName}`;
+  if (image) {
+    await uploadImage(imageName, image);
+    await deleteOldImage(oldImage);
+    review.image = imagePath;
+  }
+  console.log(review);
+  console.log(id);
   const { data, error } = await supabase
     .from("user-recipes")
-    .update({ notes })
+    .update({ ...review })
     .eq("id", id)
     .select();
 
@@ -380,4 +391,35 @@ export async function updateUser({ user, userId }) {
     throw new Error("error updating user");
   }
   return data[0];
+}
+
+async function uploadImage(imageName, image) {
+  const { error: storageError } = await supabase.storage
+    .from("recipe-images")
+    .upload(imageName, image);
+  if (storageError) throw new Error(storageError);
+}
+
+async function deleteOldImage(oldImage) {
+  if (oldImage) {
+    const toDeleteString = `${supabaseUrl}/storage/v1/object/public/recipe-images/`;
+    const imageName2 = oldImage.replace(toDeleteString, "");
+    if (oldImage?.startsWith?.(supabaseUrl)) {
+      const { error: storageError } = await supabase.storage
+        .from("recipe-images")
+        .remove([imageName2]);
+      if (storageError) throw new Error(storageError);
+    }
+  }
+}
+
+export async function getUsers({ search, userId }) {
+  let { data: users, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("name", search)
+    .neq("id", userId);
+  if (error) throw new Error("error getting users");
+  console.log(users);
+  return users;
 }

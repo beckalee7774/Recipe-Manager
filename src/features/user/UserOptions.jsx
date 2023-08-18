@@ -46,7 +46,10 @@ function UserOptions() {
       >
         {darkmode ? <BsSun /> : <BsFillMoonFill />}
       </button>
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-orange-100 p-3">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="bg-orange-100 p-3 dark:bg-orange-700"
+      >
         <div className="flex flex-col gap-3 mb-4 ">
           <FormRow label="name">
             <input

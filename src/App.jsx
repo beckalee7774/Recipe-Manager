@@ -17,6 +17,8 @@ import { Toaster } from "react-hot-toast";
 import LoggedOutLayout from "./ui/LoggedOutLayout";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import { UserProvider } from "./contexts/UserContext";
+import SearchUsersPage from "./pages/SearchUsersPage";
+import Feed from "./pages/Feed";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -52,6 +54,8 @@ function App() {
                 <Route path="reviews" element={<ReviewRecipes />} />
                 <Route path="todo" element={<TodoRecipes />} />
                 <Route path="settings" element={<UserSettings />} />
+                <Route path="search-users" element={<SearchUsersPage />} />
+                <Route path="feed" element={<Feed />} />
 
                 <Route path="*" element={<PageNotFound />} />
               </Route>

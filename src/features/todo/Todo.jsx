@@ -12,17 +12,22 @@ function Todo({ todo }) {
   const { isLoading, userRecipe } = useUserRecipe({
     recipeId: todo.recipeId,
   });
-  console.log(todo);
   const { isDeleting, deleteTodoReview } = useDeleteTodoReview({
     userId: user.id,
   });
   if (isLoading || isDeleting) return <Spinner />;
   return (
-    <li className="text-sm mb-3">
-      <div className="flex gap-2 items-center justify-around">
-        <img src={todo.image} alt={userRecipe.title} className="w-16" />
+    <li className="text-sm mb-3 border-b border-orange-600">
+      <div className="grid grid-cols-[minmax(70px,_auto)_1fr_1fr_auto] gap-2 items-center justify-center">
+        <img
+          src={
+            todo.image ? todo.image : "../../../public/recipe-default-image.png"
+          }
+          alt={userRecipe.title}
+          className="w-16"
+        />
+        <span className="font-semibold">{userRecipe.title}</span>
         <div className="flex flex-col">
-          <span className="font-semibold">{userRecipe.title}</span>
           <RecipeLink
             sourceUrl={userRecipe.sourceUrl}
             sourceName={userRecipe.sourceName}
@@ -37,7 +42,7 @@ function Todo({ todo }) {
             </Link>
           )}
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 items-center">
           <AddReviewModal
             userRecipe={userRecipe}
             todoExists={true}

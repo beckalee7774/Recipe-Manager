@@ -8,7 +8,14 @@ import {
 import { useCurrentUser } from "../../contexts/UserContext";
 import Spinner from "../../ui/Spinner";
 import { useFavourite } from "./useFavourite";
-function ReviewOperations({ review, deleteTodoReview, setIsEditing }) {
+function ReviewOperations({
+  review,
+  deleteTodoReview,
+  setIsEditing,
+  setStarRating,
+  isEditing,
+  setNotes,
+}) {
   const { user } = useCurrentUser();
   const { isUpdating, updateFavourite } = useFavourite({ userId: user.id });
   if (isUpdating) return <Spinner />;
@@ -30,6 +37,10 @@ function ReviewOperations({ review, deleteTodoReview, setIsEditing }) {
 
       <button
         onClick={() => {
+          if (isEditing) {
+            setStarRating(review.stars);
+            setNotes(review.notes);
+          }
           setIsEditing((e) => !e);
         }}
       >

@@ -1,6 +1,7 @@
 import Review from "./Review";
 import { useReviews } from "./useReviews";
 import Spinner from "../../ui/Spinner";
+import Sortby from "../../ui/Sortby";
 import { useCurrentUser } from "../../contexts/UserContext";
 import AddReviewModal from "./AddReviewModal";
 function ReviewList() {
@@ -17,8 +18,9 @@ function ReviewList() {
       </div>
     );
   return (
-    <>
-      <ul className="dark:bg-orange-700 dark:text-orange-200 bg-orange-100 p-2 text-orange-600 max-w-md mx-[auto]">
+    <div className=" max-w-md mx-[auto]">
+      <Sortby />
+      <ul className="dark:bg-orange-700 dark:text-orange-200 bg-orange-100 p-2 text-orange-600">
         {reviews.map((review) => (
           <Review review={review} key={review.id} />
         ))}
@@ -26,7 +28,7 @@ function ReviewList() {
           <AddReviewModal />
         </li>
       </ul>
-    </>
+    </div>
   );
 }
 

@@ -4,6 +4,8 @@ import {
   BsPencil,
   BsCardChecklist,
   BsPersonGear,
+  BsPersonPlus,
+  BsReverseLayoutTextSidebarReverse,
 } from "react-icons/bs";
 import Logo from "./Logo";
 import { useSidebar } from "../contexts/SidebarContext";
@@ -43,6 +45,18 @@ function Sidebar() {
             <NavLink to="settings" className="flex gap-2 ">
               <BsPersonGear />
               <span>Settings</span>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="search-users" className="flex gap-2 ">
+              <BsPersonPlus />
+              <span>Users</span>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="feed" className="flex gap-2 ">
+              <BsReverseLayoutTextSidebarReverse />
+              <span>Feed</span>
             </NavLink>
           </li>
         </ul>

@@ -2,13 +2,14 @@ import { Link } from "react-router-dom";
 import RecipeLink from "../../ui/RecipeLink";
 import Spinner from "../../ui/Spinner";
 import ReviewOperations from "./ReviewOperations";
-import { BsStarFill, BsCheckSquare } from "react-icons/bs";
+import { BsCheckSquare, BsUpload } from "react-icons/bs";
 import { useUserRecipe } from "./useUserRecipe";
 import { useSidebar } from "../../contexts/SidebarContext";
 import { useDeleteTodoReview } from "../todo/useDeleteTodoReview";
 import { useEffect, useRef, useState } from "react";
-import { useUpdateNotes } from "./useUpdateNotes";
+import { useUpdateReview } from "./useUpdateReview";
 import { useCurrentUser } from "../../contexts/UserContext";
+import StarRating from "../../ui/StarRating";
 function Review({ review }) {
   const { user } = useCurrentUser();
   const { isLoading, userRecipe } = useUserRecipe({
@@ -20,8 +21,11 @@ function Review({ review }) {
     userId: user.id,
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [notes, setNotes] = useState(review.notes);
-  const { isUpdating, updateNotes } = useUpdateNotes({ userId: user.id });
+  const [image, setImage] = useState("");
+  const [starRating, setStarRating] = useState(review.stars);
+  const { isUpdating, updateReview } = useUpdateReview({ userId: user.id });
   const inputRef = useRef(null);
   const notesCss = isEditing
     ? "border-slate-500 bg-slate-50 p-1 text-slate-500 focus:outline-none focus:ring focus:ring-orange-400"
@@ -34,10 +38,13 @@ function Review({ review }) {
     },
     [isEditing]
   );
-  function handleUpdateNotes(e) {
+  function handleUpdate(e) {
+    const reviewToUpdate = isUploadingPhoto
+      ? { notes, image, stars: starRating }
+      : { notes, stars: starRating };
     e.preventDefault();
-    updateNotes(
-      { id: review.id, notes },
+    updateReview(
+      { review: reviewToUpdate, id: review.id, oldImage: review.image },
       {
         onSuccess: () => {
           setIsEditing(false);
@@ -46,19 +53,34 @@ function Review({ review }) {
     );
   }
   if (isLoading || isDeleting || isUpdating) return <Spinner />;
+  if (userRecipe.title === "Maple Salmon") {
+    console.log(review.image);
+  }
   return (
     <li className="text-sm mb-3">
-      <div className="flex gap-2 items-center justify-around">
-        <img src={review.image} alt={userRecipe.title} className="w-16" />
+      {/* <div className="flex gap-2 items-center justify-around"> */}
+      <div className="grid grid-cols-[minmax(70px,_auto)_1fr_auto] gap-2 items-center">
+        <img
+          src={
+            review.image
+              ? review.image
+              : "../../../public/recipe-default-image.png"
+          }
+          alt={userRecipe.title}
+          className="w-16"
+        />
         <div
-          className={layoutStringSidebar.concat(" flex sm:gap-3 sm:flex-row")}
+          className={layoutStringSidebar.concat(
+            " flex sm:gap-0 sm:grid sm:grid-cols-[1fr_1fr] sm:items-center sm:justify-center"
+          )}
         >
           <div>
-            <div className="flex gap-1 mb-1">
-              {Array.from({ length: review.stars }, (_, i) => (
-                <BsStarFill className="h-2.5" key={i} />
-              ))}
-            </div>
+            <StarRating
+              stars={review.stars}
+              isEditing={isEditing}
+              rating={starRating}
+              setRating={setStarRating}
+            />
             <span className="font-semibold">{userRecipe.title}</span>
           </div>
           <div className="flex flex-col">
@@ -81,15 +103,39 @@ function Review({ review }) {
           review={review}
           deleteTodoReview={deleteTodoReview}
           setIsEditing={setIsEditing}
+          setStarRating={setStarRating}
+          isEditing={isEditing}
+          setNotes={setNotes}
         />
       </div>
-      {/* <input
-        className="text-xs mt-1 border-b border-slate-500 bg-slate-50 p-1 text-slate-500 w-full"
-        value={`Notes: ${review.notes}`}
-      /> */}
-      <form className="relative" onSubmit={handleUpdateNotes}>
+      <form className="relative  text-xs" onSubmit={handleUpdate}>
+        {isEditing && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setIsUploadingPhoto((up) => !up);
+            }}
+            className="py-1 px-2 hover:text-orange-700 rounded-full my-2 dark:hover:text-orange-100"
+          >
+            <div className="flex gap-1 items-center">
+              {!isUploadingPhoto && <BsUpload />}
+              <span>{isUploadingPhoto ? "x cancel" : "upload"}</span>
+            </div>
+          </button>
+        )}
+        {isEditing && isUploadingPhoto && (
+          <div className="my-1">
+            <input
+              id="newImage"
+              type="file"
+              accept="image/*"
+              required
+              onChange={(e) => setImage(e.target.files)}
+            />
+          </div>
+        )}
         <textarea
-          className={"text-xs mt-1 border-b p-1 w-full overflow-scroll ".concat(
+          className={"mt-1 border-b p-1 w-full overflow-scroll ".concat(
             notesCss
           )}
           value={notes}

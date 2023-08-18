@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useCurrentUser } from "../../contexts/UserContext";
 import FormRow from "../../ui/FormRow";
 import Heading from "../../ui/Heading";
+import StarRating from "../../ui/StarRating";
 import { useAddReview } from "./useAddReview";
 
 function AddReviewModal({
@@ -20,6 +21,7 @@ function AddReviewModal({
   });
   const { isAdding, addReview } = useAddReview({ userId: user.id });
   const [keepOldPhoto, setKeepOldPhoto] = useState(todoExists);
+  const [starRating, setStarRating] = useState(0);
   const { errors } = formState;
   const navigate = useNavigate();
   function onSubmit(data) {
@@ -37,7 +39,7 @@ function AddReviewModal({
             userId: user.id,
             status: "review",
             favourite: data.favourite,
-            stars: Number(data.stars),
+            stars: starRating,
             notes: data.notes,
             image: data.image,
           },
@@ -60,7 +62,7 @@ function AddReviewModal({
             status: "review",
             recipeId: userRecipe.id,
             favourite: data.favourite,
-            stars: Number(data.stars),
+            stars: starRating,
             notes: data.notes,
             id: todoId,
             image: keepOldPhoto ? todoImage : data.image,
@@ -131,9 +133,7 @@ function AddReviewModal({
                     accept={keepOldPhoto ? "" : "image/*"}
                     type={keepOldPhoto ? "text" : "file"}
                     disabled={isAdding || keepOldPhoto}
-                    {...register("image", {
-                      required: keepOldPhoto ? false : "this field is required",
-                    })}
+                    {...register("image")}
                   />
                 </FormRow>
               )}
@@ -165,7 +165,7 @@ function AddReviewModal({
                   {...register("favourite")}
                 />
               </FormRow>
-              <FormRow label="stars" error={errors?.stars?.message}>
+              {/* <FormRow label="stars" error={errors?.stars?.message}>
                 <input
                   id="stars"
                   type="number"
@@ -182,7 +182,15 @@ function AddReviewModal({
                     },
                   })}
                 />
-              </FormRow>
+              </FormRow> */}
+              <div className="flex items-center gap-2">
+                <span>star rating</span>
+                <StarRating
+                  isEditing={true}
+                  rating={starRating}
+                  setRating={setStarRating}
+                />
+              </div>
               <FormRow label="notes" error={errors?.notes?.message}>
                 <textarea
                   id="notes"

@@ -1,9 +1,8 @@
 import SearchedRecipe from "./SearchedRecipe";
+
 function RecipeSearchList({ recipes }) {
   const max = recipes?.length === 10;
   const length = recipes.length;
-  // const max = fakerecipes?.length === 10;
-  // const length = fakerecipes.length;
   return (
     <div className="bg-orange-100 p-3 mt-3 rounded-md dark:bg-orange-700">
       <h3 className="uppercase text-xs text-orange-700 mb-2">

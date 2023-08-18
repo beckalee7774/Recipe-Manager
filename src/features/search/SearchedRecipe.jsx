@@ -3,7 +3,7 @@ import { BsArrowBarRight } from "react-icons/bs";
 
 function SearchedRecipe({ recipe }) {
   return (
-    <div className="border-b justify-between border-slate-400 flex gap-2 items-center ">
+    <div className="border-b justify-between border-slate-400 grid grid-cols-[auto_1fr_auto] gap-2 items-center ">
       <img src={recipe.image} className="w-16" alt={`${recipe.title}`} />
       <h2 className="text-sm">{recipe.title}</h2>
       <Link

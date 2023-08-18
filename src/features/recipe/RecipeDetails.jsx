@@ -58,8 +58,9 @@ function RecipeDetails() {
       </div>
       <div className="flex flex-col items-center gap-1">
         <h1 className="text-center font-bold">{recipeInfo.title}</h1>
-        {/* add taste widgets? */}
-        <img src={recipeInfo.image} alt={recipeInfo.id} className="w-40" />
+        {recipeInfo?.image && (
+          <img src={recipeInfo.image} alt={recipeInfo.id} className="w-40" />
+        )}
       </div>
       <div className="flex items-center gap-3 mt-2">
         <div className="flex items-center gap-1">
