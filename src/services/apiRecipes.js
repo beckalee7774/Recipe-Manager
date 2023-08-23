@@ -1,6 +1,7 @@
 //api requests to spoontacular api
-const APIKEY = "";
+const APIKEY = import.meta.env.VITE_SPOONTACULAR_API_KEY;
 export async function searchRecipes({ search, searchByIngredients }) {
+  console.log(import.meta.env);
   var searchString = search.replace(" ", "&");
   var fetchString = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&query=${searchString}`;
   if (searchByIngredients) {
