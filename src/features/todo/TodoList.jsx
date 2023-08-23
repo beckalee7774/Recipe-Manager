@@ -10,7 +10,10 @@ function TodoList() {
   if (isLoading) return <Spinner />;
   if (todos.length === 0)
     return (
-      <h1 className="text-center">You have no recipes in your todo list</h1>
+      <div className="flex flex-col items-center gap-1">
+        <h1 className="text-center">You have no recipes in your todo list</h1>
+        <AddTodoModal />
+      </div>
     );
   return (
     <ul className=" text-orange-600 bg-orange-100 p-2 max-w-md mx-[auto] dark:bg-orange-700 dark:text-orange-200">

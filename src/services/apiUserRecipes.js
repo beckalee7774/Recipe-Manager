@@ -41,7 +41,7 @@ export async function getUserTodos({ userId }) {
     .order("created_at", { ascending: true });
   if (error) {
     console.log(error);
-    throw new Error("error getting user Tods");
+    throw new Error("error getting user Todos");
   }
   return userRecipes;
 }

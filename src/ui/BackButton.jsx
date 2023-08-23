@@ -5,7 +5,7 @@ function BackButton() {
   return (
     <button
       onClick={() => navigate(-1)}
-      className="text-xs p-1 hover:text-orange-100"
+      className="text-xs p-1 hover:text-orange-500"
     >
       &larr; Back
     </button>

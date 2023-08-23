@@ -23,47 +23,68 @@ function Sidebar() {
       </button>
       <Logo />
       <nav>
-        <ul className="flex flex-col gap-5 font-medium uppercase text-xs text-slate-50 p-1">
+        <ul className="flex flex-col gap-5 font-medium uppercase text-xs text-orange-100 p-1 dark:text-orange-200">
           <li>
-            <NavLink to={`home`} className="flex gap-2 ">
+            <NavLink
+              to={`home`}
+              className="flex gap-2 hover:text-orange-800 dark:hover:text-orange-100"
+            >
               <BsHouseDoor />
               <span>Home</span>
             </NavLink>
           </li>
           <li>
-            <NavLink to="search" className="flex gap-2 ">
+            <NavLink
+              to="search"
+              className="flex gap-2 hover:text-orange-800 dark:hover:text-orange-100"
+            >
               <BsSearch />
               <span>Search</span>
             </NavLink>
           </li>
           <li>
-            <NavLink to="reviews" className="flex gap-2 ">
+            <NavLink
+              to="reviews"
+              className="flex gap-2 hover:text-orange-800 dark:hover:text-orange-100"
+            >
               <BsPencil />
               <span>Reviews</span>
             </NavLink>
           </li>
           <li>
-            <NavLink to="todo" className="flex gap-2 ">
+            <NavLink
+              to="todo"
+              className="flex gap-2 hover:text-orange-800 dark:hover:text-orange-100"
+            >
               <BsCardChecklist />
               <span>Todo</span>
             </NavLink>
           </li>
 
           <li>
-            <NavLink to="search-users" className="flex gap-2 ">
+            <NavLink
+              to="search-users"
+              className="flex gap-2 hover:text-orange-800 dark:hover:text-orange-100"
+            >
               <BsPersonPlus />
               <span>Users</span>
             </NavLink>
           </li>
 
           <li>
-            <NavLink to="feed" className="flex gap-2 ">
+            <NavLink
+              to="feed"
+              className="flex gap-2 hover:text-orange-800 dark:hover:text-orange-100"
+            >
               <BsReverseLayoutTextSidebarReverse />
               <span>Feed</span>
             </NavLink>
           </li>
           <li>
-            <NavLink to="settings" className="flex gap-2 ">
+            <NavLink
+              to="settings"
+              className="flex gap-2 hover:text-orange-800 dark:hover:text-orange-100"
+            >
               <BsPersonGear />
               <span>Settings</span>
             </NavLink>

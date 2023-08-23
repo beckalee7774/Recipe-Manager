@@ -1,14 +1,19 @@
+import { useParams } from "react-router-dom";
 import List from "../../ui/List";
 import Spinner from "../../ui/Spinner";
 import OtherUserRow from "./OtherUserRow";
 import { useFollowers } from "./useFollowers";
+import { useUser } from "./useUser";
 
-function FollowersList({ user }) {
-  const { isLoading, followers } = useFollowers({ followedId: user.id });
-  if (isLoading) return <Spinner />;
+function FollowersList() {
+  const { id } = useParams();
+  const { isLoading, user } = useUser({ userId: id });
+  const { isLoading: isLoading2, followers } = useFollowers({
+    followedId: user.id,
+  });
+  if (isLoading || isLoading2) return <Spinner />;
   return (
     <List
-      title="Followers"
       list={followers}
       render={(followerId) => (
         <OtherUserRow

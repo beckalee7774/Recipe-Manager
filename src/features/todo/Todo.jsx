@@ -60,7 +60,7 @@ function Todo({ todo }) {
                 image: todo.image,
               });
             }}
-            className="text-[0.5rem] flex items-center gap-1 bg-red-100 text-red-700 px-1 rounded-full dark:bg-red-800 dark:text-red-200"
+            className="text-[0.5rem] flex items-center gap-1 bg-red-100 text-red-700 px-1 rounded-full dark:bg-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-700"
           >
             <BsTrash3 />
             <span>Delete</span>

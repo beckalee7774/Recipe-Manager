@@ -21,6 +21,9 @@ import SearchUsersPage from "./pages/SearchUsersPage";
 import Feed from "./pages/Feed";
 import UserPage from "./pages/UserPage";
 import Home from "./pages/Home";
+import FollowersList from "./features/user/FollowersList";
+import CheckFollow from "./ui/CheckFollow";
+import FollowingList from "./features/user/FollowingList";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -60,6 +63,14 @@ function App() {
                 <Route path="feed" element={<Feed />} />
                 <Route path="user/:id" element={<UserPage />} />
                 <Route path="home" element={<Home />} />
+                <Route element={<CheckFollow />}>
+                  <Route
+                    path="followers/:id"
+                    index
+                    element={<FollowersList />}
+                  />
+                  <Route path="following/:id" element={<FollowingList />} />
+                </Route>
                 <Route path="*" element={<PageNotFound />} />
               </Route>
             </Routes>

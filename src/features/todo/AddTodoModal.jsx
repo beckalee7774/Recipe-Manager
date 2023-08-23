@@ -45,7 +45,7 @@ function AddTodoModal({}) {
     <>
       <button
         onClick={() => setModalIsOpen(true)}
-        className="text-[0.5rem] flex items-center gap-1 bg-teal-100 text-teal-700 px-1 rounded-full dark:bg-teal-800 dark:text-teal-200"
+        className="text-[0.5rem] flex items-center gap-1 bg-teal-100 text-teal-700 px-1 rounded-full dark:bg-teal-800 dark:text-teal-200 dark:hover:bg-teal-800 hover:bg-teal-200"
       >
         <BsPlusCircle />
         <span>Todos</span>

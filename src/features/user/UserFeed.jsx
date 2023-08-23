@@ -8,6 +8,12 @@ function UserFeed() {
   const { user } = useCurrentUser();
   const { isLoading, feed } = useFeed({ userId: user.id });
   if (isLoading) return <Spinner />;
+  if (feed.length === 0)
+    return (
+      <h3 className="text-center font-semibold">
+        No Posts within the last 7 days
+      </h3>
+    );
   return (
     <div>
       <h2 className="text-center">Showing reviews within the last 7 days</h2>

@@ -1,12 +1,10 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Spinner from "../../ui/Spinner";
 import List from "../../ui/List";
 import BackButton from "../../ui/BackButton";
 import { useUser } from "./useUser";
 import { useReviews } from "../review/useReviews";
 import SharedReview from "../review/SharedReview";
-import FollowersList from "./FollowersList";
-import FollowingList from "./FollowingList";
 
 function UserProfile({ home = false, userId = null }) {
   let { id } = useParams();
@@ -32,18 +30,32 @@ function UserProfile({ home = false, userId = null }) {
           alt={user.name}
           className="h-32"
         />
-        <List
-          list={reviews}
-          render={(review) => <SharedReview review={review} key={review.id} />}
-          listStyle="list-none bg-orange-100 p-2 max-w-md mx-[auto] dark:bg-orange-700"
-        />
-      </div>
-      {home && (
-        <div className="flex justify-between mt-5">
-          <FollowersList user={user} />
-          <FollowingList user={user} />
+        <div className="flex gap-20 mt-5">
+          <Link
+            to={`/followers/${id}`}
+            className="text-orange-600 hover:text-orange-800 dark:hover:text-orange-300"
+          >
+            Followers
+          </Link>
+          <Link
+            to={`/following/${id}`}
+            className="text-orange-600 hover:text-orange-800 dark:hover:text-orange-300"
+          >
+            Following
+          </Link>
         </div>
-      )}
+        {reviews.length === 0 ? (
+          <span className="text-xs uppercase mt-3">No Shared Reviews Yet</span>
+        ) : (
+          <List
+            list={reviews}
+            render={(review) => (
+              <SharedReview review={review} key={review.id} />
+            )}
+            listStyle="list-none bg-orange-100 p-2 max-w-md mx-[auto] dark:bg-orange-700"
+          />
+        )}
+      </div>
     </div>
   );
 }
