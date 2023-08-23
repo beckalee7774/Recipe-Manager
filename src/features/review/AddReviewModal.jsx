@@ -42,6 +42,7 @@ function AddReviewModal({
             stars: starRating,
             notes: data.notes,
             image: data.image,
+            share: data.share,
           },
           todoExists,
           keepOldPhoto,
@@ -66,6 +67,7 @@ function AddReviewModal({
             notes: data.notes,
             id: todoId,
             image: keepOldPhoto ? todoImage : data.image,
+            share: data.share,
           },
           todoExists,
           keepOldPhoto,
@@ -165,24 +167,6 @@ function AddReviewModal({
                   {...register("favourite")}
                 />
               </FormRow>
-              {/* <FormRow label="stars" error={errors?.stars?.message}>
-                <input
-                  id="stars"
-                  type="number"
-                  disabled={isAdding}
-                  {...register("stars", {
-                    required: "this field is required",
-                    min: {
-                      value: 1,
-                      message: "star rating must be bewtween 1 and 5",
-                    },
-                    max: {
-                      value: 5,
-                      message: "star rating must be bewtween 1 and 5",
-                    },
-                  })}
-                />
-              </FormRow> */}
               <div className="flex items-center gap-2">
                 <span>star rating</span>
                 <StarRating
@@ -196,6 +180,16 @@ function AddReviewModal({
                   id="notes"
                   disabled={isAdding}
                   {...register("notes")}
+                />
+              </FormRow>
+              <FormRow label="share" error={errors?.share?.message}>
+                <input
+                  id="share"
+                  disabled={isAdding}
+                  type="checkbox"
+                  className="h-4 w-4 accent-orange-400 focus:outline-none focus:ring
+            focus:ring-orange-400 focus:ring-offset-2"
+                  {...register("share")}
                 />
               </FormRow>
               <button className="hover:bg-orange-200 bg-orange-300 text-orange-900 p-2 rounded-full">

@@ -19,6 +19,8 @@ import ProtectedRoute from "./ui/ProtectedRoute";
 import { UserProvider } from "./contexts/UserContext";
 import SearchUsersPage from "./pages/SearchUsersPage";
 import Feed from "./pages/Feed";
+import UserPage from "./pages/UserPage";
+import Home from "./pages/Home";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,7 +48,7 @@ function App() {
                   </ProtectedRoute>
                 }
               >
-                <Route index element={<Navigate replace to="search" />} />
+                <Route index element={<Navigate replace to="home" />} />
                 <Route path="search" element={<SearchRecipes />} />
                 <Route path="recipe/:id" element={<Recipe />} />
                 <Route path="recipe/nutrition/:id" element={<Nutrition />} />
@@ -56,7 +58,8 @@ function App() {
                 <Route path="settings" element={<UserSettings />} />
                 <Route path="search-users" element={<SearchUsersPage />} />
                 <Route path="feed" element={<Feed />} />
-
+                <Route path="user/:id" element={<UserPage />} />
+                <Route path="home" element={<Home />} />
                 <Route path="*" element={<PageNotFound />} />
               </Route>
             </Routes>

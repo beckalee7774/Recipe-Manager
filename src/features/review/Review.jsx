@@ -28,8 +28,8 @@ function Review({ review }) {
   const { isUpdating, updateReview } = useUpdateReview({ userId: user.id });
   const inputRef = useRef(null);
   const notesCss = isEditing
-    ? "border-slate-500 bg-slate-50 p-1 text-slate-500 focus:outline-none focus:ring focus:ring-orange-400"
-    : "border-orange-500 bg-orange-100 dark:bg-orange-600";
+    ? " border-slate-500 bg-slate-50 p-1 text-slate-500 focus:outline-none focus:ring focus:ring-orange-400"
+    : " border-orange-500 bg-orange-100 dark:bg-orange-600";
   useEffect(
     function () {
       if (isEditing) {
@@ -58,7 +58,6 @@ function Review({ review }) {
   }
   return (
     <li className="text-sm mb-3">
-      {/* <div className="flex gap-2 items-center justify-around"> */}
       <div className="grid grid-cols-[minmax(70px,_auto)_1fr_auto] gap-2 items-center">
         <img
           src={

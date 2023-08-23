@@ -1,5 +1,7 @@
+import UserFeed from "../features/user/UserFeed";
+
 function Feed() {
-  return <div>Feed</div>;
+  return <UserFeed />;
 }
 
 export default Feed;

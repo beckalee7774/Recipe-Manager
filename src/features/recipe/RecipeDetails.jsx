@@ -16,7 +16,6 @@ function RecipeDetails() {
   console.log(recipeInfo);
   function handleTodo(e) {
     e.preventDefault();
-    // addTodo();
     addTodo(
       {
         recipeId: recipeInfo.id,

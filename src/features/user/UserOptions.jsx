@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { BsSun, BsFillMoonFill } from "react-icons/bs";
+import { BsSun, BsFillMoonFill, BsUpload } from "react-icons/bs";
 import { useCurrentUser } from "../../contexts/UserContext";
 import DeleteAccount from "./DeleteAccount";
 import FormRow from "../../ui/FormRow";
@@ -9,22 +9,40 @@ import { useUpdateUser } from "./useUpdateUser";
 
 function UserOptions() {
   const { user } = useCurrentUser();
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset, formState } = useForm({
     defaultValues: user,
   });
+  const { errors } = formState;
   const [darkmode, setDarkMode] = useState();
   const [showPassword, setShowPassword] = useState(false);
-  const { isLoading, updateUser } = useUpdateUser();
-  if (isLoading) return <Spinner />;
+  const { isUpdating, updateUser } = useUpdateUser();
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  if (isUpdating) return <Spinner />;
   function onSubmit(data) {
-    updateUser({
-      user: {
-        name: data.name,
-        username: data.username,
-        password: data.password,
+    const userToUpdate = isUploadingPhoto
+      ? {
+          name: data.name,
+          username: data.username,
+          password: data.password,
+          avatar: data.avatar,
+        }
+      : {
+          name: data.name,
+          username: data.username,
+          password: data.password,
+        };
+    updateUser(
+      {
+        user: userToUpdate,
+        userId: user.id,
+        oldImage: user.avatar,
       },
-      userId: user.id,
-    });
+      {
+        onSuccess: () => {
+          setIsUploadingPhoto(false);
+        },
+      }
+    );
   }
   function handleReset(e) {
     e.preventDefault();
@@ -51,6 +69,39 @@ function UserOptions() {
         className="bg-orange-100 p-3 dark:bg-orange-700"
       >
         <div className="flex flex-col gap-3 mb-4 ">
+          <img
+            src={user.avatar ? user.avatar : "../../../public/default-user.jpg"}
+            alt={user.name}
+            className="h-20 p-1 self-start"
+          />
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setIsUploadingPhoto((up) => !up);
+            }}
+            className="py-1 px-2 hover:text-orange-700 rounded-full dark:hover:text-orange-100"
+          >
+            <div className="flex gap-1 items-center">
+              {!isUploadingPhoto && <BsUpload />}
+              <span>{isUploadingPhoto ? "x cancel" : "upload"}</span>
+            </div>
+          </button>
+          {isUploadingPhoto && (
+            <>
+              <div>
+                <input
+                  id="avatar"
+                  type="file"
+                  accept="image/*"
+                  {...register("avatar", {
+                    required:
+                      "press cancel if you do not want to update your profile photo",
+                  })}
+                />
+              </div>
+              <span className="text-red-600">{errors?.avatar?.message}</span>
+            </>
+          )}
           <FormRow label="name">
             <input
               id="name"

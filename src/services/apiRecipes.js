@@ -1,5 +1,5 @@
 //api requests to spoontacular api
-const APIKEY = "confidential";
+const APIKEY = import.meta.env.VITE_API_KEY;
 export async function searchRecipes({ search, searchByIngredients }) {
   var searchString = search.replace(" ", "&");
   var fetchString = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&query=${searchString}`;
@@ -7,7 +7,6 @@ export async function searchRecipes({ search, searchByIngredients }) {
     searchString = search.replace(" ", "+");
     fetchString = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${APIKEY}&ingredients=${searchString}&ignorePantry=true`;
   }
-  console.log(fetchString);
   try {
     const res = await fetch(fetchString);
 

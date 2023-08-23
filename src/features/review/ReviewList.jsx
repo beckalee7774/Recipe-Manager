@@ -4,6 +4,7 @@ import Spinner from "../../ui/Spinner";
 import Sortby from "../../ui/Sortby";
 import { useCurrentUser } from "../../contexts/UserContext";
 import AddReviewModal from "./AddReviewModal";
+import Filter from "../../ui/Filter";
 function ReviewList() {
   const { user } = useCurrentUser();
   const { isLoading, reviews } = useReviews({ userId: user.id });
@@ -19,7 +20,10 @@ function ReviewList() {
     );
   return (
     <div className=" max-w-md mx-[auto]">
-      <Sortby />
+      <div className="flex gap-4">
+        <Sortby />
+        <Filter />
+      </div>
       <ul className="dark:bg-orange-700 dark:text-orange-200 bg-orange-100 p-2 text-orange-600">
         {reviews.map((review) => (
           <Review review={review} key={review.id} />

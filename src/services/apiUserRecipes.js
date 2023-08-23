@@ -1,16 +1,30 @@
 import supabase, { supabaseUrl } from "./supabase";
 
 //api requests to supabase database
-export async function getUserReviews({ userId, sortby }) {
+export async function getUserReviews({ userId, sortby, filter, isProfile }) {
   const sortbyValue =
     sortby === "recent" || !sortby || sortby === "none" ? "created_at" : sortby;
   const ascending = sortby === "none" || !sortby ? true : false;
-  let { data: userRecipes, error } = await supabase
+  let query = supabase
     .from("user-recipes")
     .select("*")
     .eq("status", "review")
     .eq("userId", userId)
     .order(sortbyValue, { ascending: ascending });
+
+  if (filter === "favourite") {
+    query = query.eq("favourite", true);
+  }
+  if (filter === "shared" || isProfile) {
+    query = query.eq("share", true);
+  }
+  let { data: userRecipes, error } = await query;
+  // let { data: userRecipes, error } = await supabase
+  //   .from("user-recipes")
+  //   .select("*")
+  //   .eq("status", "review")
+  //   .eq("userId", userId)
+  //   .order(sortbyValue, { ascending: ascending });
   if (error) {
     console.log(error);
     throw new Error("error getting user Reviews");
@@ -108,8 +122,9 @@ export async function addTodo({ recipeId, recipe, todo }) {
     const image = todo?.image?.[0];
     const imageName = `${Math.random()}-${image?.name}`?.replaceAll?.("/", "");
     const imagePath = `${supabaseUrl}/storage/v1/object/public/recipe-images/${imageName}`;
+    const bucketName = "recipe-images";
     if (image) {
-      await uploadImage(imageName, image);
+      await uploadImage(imageName, image, bucketName);
       todo.image = imagePath;
     } else {
       todo.image = null;
@@ -143,14 +158,15 @@ export async function addReview({
         ""
       );
       const imagePath = `${supabaseUrl}/storage/v1/object/public/recipe-images/${imageName}`;
+      const bucketName = "recipe-images";
       if (image) {
-        await uploadImage(imageName, image);
+        await uploadImage(imageName, image, bucketName);
         review.image = imagePath;
       } else {
         review.image = null;
       }
       //if old image is stored in a supabase bucket then we should delete it
-      await deleteOldImage(todoOldImage);
+      await deleteOldImage(todoOldImage, bucketName);
 
       //update current todo row
       const { data, error } = await supabase
@@ -192,8 +208,9 @@ export async function addReview({
     const image = review?.image?.[0];
     const imageName = `${Math.random()}-${image?.name}`?.replaceAll?.("/", "");
     const imagePath = `${supabaseUrl}/storage/v1/object/public/recipe-images/${imageName}`;
+    const bucketName = "recipe-images";
     if (image) {
-      await uploadImage(imageName, image);
+      await uploadImage(imageName, image, bucketName);
       review.image = imagePath;
     } else {
       review.image = null;
@@ -210,18 +227,6 @@ export async function addReview({
     return data2;
   }
 }
-
-// export async function getUser({ userId }) {
-//   let { data, error } = await supabase
-//     .from("users")
-//     .select("*")
-//     .eq("id", userId);
-//   if (error) {
-//     console.log(error);
-//     throw new Error("error getting user");
-//   }
-//   return data[0];
-// }
 
 export async function deleteTodoReview({ id, recipeId, image }) {
   //delete todo/review
@@ -271,13 +276,12 @@ export async function updateReview({ review, id, oldImage }) {
   const image = review?.image?.[0];
   const imageName = `${Math.random()}-${image?.name}`?.replaceAll?.("/", "");
   const imagePath = `${supabaseUrl}/storage/v1/object/public/recipe-images/${imageName}`;
+  const bucketName = "recipe-images";
   if (image) {
-    await uploadImage(imageName, image);
-    await deleteOldImage(oldImage);
+    await uploadImage(imageName, image, bucketName);
+    await deleteOldImage(oldImage, bucketName);
     review.image = imagePath;
   }
-  console.log(review);
-  console.log(id);
   const { data, error } = await supabase
     .from("user-recipes")
     .update({ ...review })
@@ -363,7 +367,16 @@ export async function checkUserExists({ userData }) {
   }
 }
 
-export async function updateUser({ user, userId }) {
+export async function updateUser({ user, userId, oldImage }) {
+  const image = user?.avatar?.[0];
+  const imageName = `${userId}-${image?.name}`?.replaceAll?.("/", "");
+  const imagePath = `${supabaseUrl}/storage/v1/object/public/avatars/${imageName}`;
+  const bucketName = "avatars";
+  if (image) {
+    await uploadImage(imageName, image, bucketName);
+    await deleteOldImage(oldImage, bucketName);
+    user.avatar = imagePath;
+  }
   //check if username exists
   let { data: users, error } = await supabase
     .from("users")
@@ -393,20 +406,23 @@ export async function updateUser({ user, userId }) {
   return data[0];
 }
 
-async function uploadImage(imageName, image) {
+async function uploadImage(imageName, image, bucketName) {
+  console.log(imageName);
+  console.log(image);
+  console.log(bucketName);
   const { error: storageError } = await supabase.storage
-    .from("recipe-images")
+    .from(bucketName)
     .upload(imageName, image);
   if (storageError) throw new Error(storageError);
 }
 
-async function deleteOldImage(oldImage) {
+async function deleteOldImage(oldImage, bucketName) {
   if (oldImage) {
-    const toDeleteString = `${supabaseUrl}/storage/v1/object/public/recipe-images/`;
+    const toDeleteString = `${supabaseUrl}/storage/v1/object/public/${bucketName}/`;
     const imageName2 = oldImage.replace(toDeleteString, "");
     if (oldImage?.startsWith?.(supabaseUrl)) {
       const { error: storageError } = await supabase.storage
-        .from("recipe-images")
+        .from(bucketName)
         .remove([imageName2]);
       if (storageError) throw new Error(storageError);
     }
@@ -420,6 +436,117 @@ export async function getUsers({ search, userId }) {
     .eq("name", search)
     .neq("id", userId);
   if (error) throw new Error("error getting users");
-  console.log(users);
   return users;
+}
+
+export async function updateShare({ id, share }) {
+  const { data, error } = await supabase
+    .from("user-recipes")
+    .update({ share })
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.log(error);
+    throw new Error("error updating share");
+  }
+  return data;
+}
+
+//checks if followerId follows followedId
+export async function checkUserFollows({ followerId, followedId }) {
+  const { data, error } = await supabase
+    .from("user-follows")
+    .select("*")
+    .eq("followerId", followerId)
+    .eq("followedId", followedId);
+
+  if (error) {
+    console.log(error);
+    throw new Error("error checking if user follows");
+  }
+  if (data.length === 0) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+export async function follow({ followerId, followedId }) {
+  const { data, error } = await supabase
+    .from("user-follows")
+    .insert([{ followerId, followedId }])
+    .select();
+
+  if (error) {
+    console.log(error);
+    throw new Error("error following user");
+  }
+  return data;
+}
+
+export async function unfollow({ followerId, followedId }) {
+  const { data, error } = await supabase
+    .from("user-follows")
+    .delete()
+    .eq("followerId", followerId)
+    .eq("followedId", followedId);
+
+  if (error) {
+    console.log(error);
+    throw new Error("error unfollowing user");
+  }
+  return data;
+}
+
+export async function getFollowers({ followedId }) {
+  const { data, error } = await supabase
+    .from("user-follows")
+    .select("*")
+    .eq("followedId", followedId);
+  if (error) {
+    console.log(error);
+    throw new Error("error getting followers");
+  }
+  return data.map((userFollows) => userFollows.followerId);
+}
+export async function getFollowing({ followerId }) {
+  const { data, error } = await supabase
+    .from("user-follows")
+    .select("*")
+    .eq("followerId", followerId);
+  if (error) {
+    console.log(error);
+    throw new Error("error getting following");
+  }
+  return data.map((userFollows) => userFollows.followedId);
+}
+
+export async function getUser({ userId }) {
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", userId);
+  if (error) {
+    console.log(error);
+    throw new Error("error getting user info");
+  }
+  return data[0];
+}
+
+export async function getFeed({ userId, date }) {
+  const following = await getFollowing({ followerId: userId });
+  const { data, error } = await supabase
+    .from("user-recipes")
+    .select("*")
+    .eq("share", true)
+    .eq("status", "review")
+    .in("userId", following)
+    .gte("created_at", date)
+    .order("created_at", { ascending: false });
+  if (error) {
+    console.log(error);
+    throw new Error("error getting user info");
+  }
+  return data;
 }

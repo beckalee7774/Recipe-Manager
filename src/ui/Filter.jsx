@@ -1,24 +1,24 @@
 import { useSearchParams } from "react-router-dom";
 
-function Sortby() {
+function Filter() {
   const [searchParams, setSearchParams] = useSearchParams();
   return (
     <div>
-      <span className="mr-2">Sort by</span>
+      <span className="mr-2">Filter by</span>
       <select
-        value={searchParams.get("sortby") ? searchParams.get("sortby") : "none"}
+        value={searchParams.get("filter") ? searchParams.get("filter") : "none"}
         onChange={(e) => {
-          searchParams.set("sortby", e.target.value);
+          searchParams.set("filter", e.target.value);
           setSearchParams(searchParams);
         }}
         className="mb-2 bg-orange-100 dark:bg-orange-700"
       >
         <option value="none">none</option>
-        <option value="recent">recent</option>
-        <option value="stars">stars</option>
+        <option value="favourite">favourite</option>
+        <option value="shared">shared</option>
       </select>
     </div>
   );
 }
 
-export default Sortby;
+export default Filter;

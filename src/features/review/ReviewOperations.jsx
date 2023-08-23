@@ -4,10 +4,12 @@ import {
   BsSend,
   BsFillHeartFill,
   BsHeart,
+  BsFillSendFill,
 } from "react-icons/bs";
 import { useCurrentUser } from "../../contexts/UserContext";
 import Spinner from "../../ui/Spinner";
 import { useFavourite } from "./useFavourite";
+import { useShare } from "./useShare";
 function ReviewOperations({
   review,
   deleteTodoReview,
@@ -18,11 +20,16 @@ function ReviewOperations({
 }) {
   const { user } = useCurrentUser();
   const { isUpdating, updateFavourite } = useFavourite({ userId: user.id });
-  if (isUpdating) return <Spinner />;
+  const { isUpdating2, updateShare } = useShare({ userId: user.id });
+  if ((isUpdating, isUpdating2)) return <Spinner />;
   return (
     <div className="grid grid-cols-2 gap-3">
-      <button>
-        <BsSend />
+      <button
+        onClick={() => {
+          updateShare({ id: review.id, share: !review.share });
+        }}
+      >
+        {review.share ? <BsFillSendFill /> : <BsSend />}
       </button>
       <button
         onClick={() =>

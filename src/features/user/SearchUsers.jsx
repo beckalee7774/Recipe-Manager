@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useSearchUsers } from "./useSearchUsers";
 import { useCurrentUser } from "../../contexts/UserContext";
 import Spinner from "../../ui/Spinner";
-import SearchedUser from "./SearchedUser";
 import List from "../../ui/List";
+import OtherUserRow from "./OtherUserRow";
 
 function SearchUsers() {
   const [search, setSearch] = useState("");
@@ -25,7 +25,7 @@ function SearchUsers() {
             htmlFor="search"
             className="text-orange-700 text-sm dark:text-orange-100"
           >
-            Search
+            Search by Name
           </label>
           <input
             id="search"
@@ -41,8 +41,14 @@ function SearchUsers() {
         <List
           title="User Results"
           list={users}
-          render={(user) => <SearchedUser user={user} key={user.id} />}
-          listStyle="list-none p-2 bg-orange-100"
+          render={(searchedUser) => (
+            <OtherUserRow
+              otherUserID={searchedUser.id}
+              userId={user.id}
+              key={searchedUser.id}
+            />
+          )}
+          listStyle="list-none p-2 bg-orange-100 dark:bg-orange-700"
         />
       )}
     </div>
