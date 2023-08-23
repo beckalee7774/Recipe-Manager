@@ -21,7 +21,9 @@ function Todo({ todo }) {
       <div className="grid grid-cols-[minmax(70px,_auto)_1fr_1fr_auto] gap-2 items-center justify-center">
         <img
           src={
-            todo.image ? todo.image : "../../../public/recipe-default-image.png"
+            todo.image
+              ? todo.image
+              : "https://lyeutanfhwlnpalhenaj.supabase.co/storage/v1/object/public/recipe-images/recipe-default-image.png?t=2023-08-23T20%3A38%3A38.220Z"
           }
           alt={userRecipe.title}
           className="w-16"

@@ -63,7 +63,7 @@ function Review({ review }) {
           src={
             review.image
               ? review.image
-              : "../../../public/recipe-default-image.png"
+              : "https://lyeutanfhwlnpalhenaj.supabase.co/storage/v1/object/public/recipe-images/recipe-default-image.png?t=2023-08-23T20%3A38%3A38.220Z"
           }
           alt={userRecipe.title}
           className="w-16"

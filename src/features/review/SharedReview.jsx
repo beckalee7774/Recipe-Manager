@@ -22,7 +22,9 @@ function SharedReview({ review, userNameIsLink = false }) {
           <Link to={`/user/${user.id}`} className="flex items-center gap-2">
             <img
               src={
-                user.avatar ? user.avatar : "../../../public/default-user.jpg"
+                user.avatar
+                  ? user.avatar
+                  : "https://lyeutanfhwlnpalhenaj.supabase.co/storage/v1/object/public/avatars/default-user.jpg?t=2023-08-23T20%3A36%3A15.282Z"
               }
               alt={user.name}
               className="h-8"
@@ -33,7 +35,9 @@ function SharedReview({ review, userNameIsLink = false }) {
           <div className="flex items-center gap-2">
             <img
               src={
-                user.avatar ? user.avatar : "../../../public/default-user.jpg"
+                user.avatar
+                  ? user.avatar
+                  : "https://lyeutanfhwlnpalhenaj.supabase.co/storage/v1/object/public/avatars/default-user.jpg?t=2023-08-23T20%3A36%3A15.282Z"
               }
               alt={user.name}
               className="h-8"
@@ -48,7 +52,7 @@ function SharedReview({ review, userNameIsLink = false }) {
           src={
             review.image
               ? review.image
-              : "../../../public/recipe-default-image.png"
+              : "https://lyeutanfhwlnpalhenaj.supabase.co/storage/v1/object/public/recipe-images/recipe-default-image.png?t=2023-08-23T20%3A38%3A38.220Z"
           }
           alt={userRecipe.title}
           className="w-16"

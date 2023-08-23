@@ -24,7 +24,11 @@ function UserProfile({ home = false, userId = null }) {
         <h1 className="text-xl">{user.name}</h1>
         <span className="text-xs">{user.username}</span>
         <img
-          src={user.avatar ? user.avatar : "../../../public/default-user.jpg"}
+          src={
+            user.avatar
+              ? user.avatar
+              : "https://lyeutanfhwlnpalhenaj.supabase.co/storage/v1/object/public/avatars/default-user.jpg?t=2023-08-23T20%3A36%3A15.282Z"
+          }
           alt={user.name}
           className="h-32"
         />

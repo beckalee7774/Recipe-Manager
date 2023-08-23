@@ -31,7 +31,7 @@ function OtherUserRow({ otherUserID, userId }) {
           src={
             otherUser.avatar
               ? otherUser.avatar
-              : "../../../public/default-user.jpg"
+              : "https://lyeutanfhwlnpalhenaj.supabase.co/storage/v1/object/public/avatars/default-user.jpg?t=2023-08-23T20%3A36%3A15.282Z"
           }
           alt={`${otherUser.name}`}
           className="h-12"
