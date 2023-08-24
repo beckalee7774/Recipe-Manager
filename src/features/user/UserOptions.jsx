@@ -75,7 +75,7 @@ function UserOptions() {
                 ? user?.avatar
                 : "https://lyeutanfhwlnpalhenaj.supabase.co/storage/v1/object/public/avatars/default-user.jpg?t=2023-08-23T20%3A36%3A15.282Z"
             }
-            alt={user.name}
+            alt={user?.name}
             className="h-32 p-1 self-start"
           />
           <button

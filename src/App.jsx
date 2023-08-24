@@ -41,6 +41,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route element={<LoggedOutLayout />}>
+                <Route index element={<Navigate replace to="login" />} />
                 <Route path="login" element={<Login />} />
                 <Route path="signup" element={<Signup />} />
               </Route>
@@ -65,10 +66,10 @@ function App() {
                 <Route path="home" element={<Home />} />
                 <Route element={<CheckFollow />}>
                   <Route
-                    path="followers/:id"
                     index
-                    element={<FollowersList />}
+                    element={<Navigate replace to="followers/:id" />}
                   />
+                  <Route path="followers/:id" element={<FollowersList />} />
                   <Route path="following/:id" element={<FollowingList />} />
                 </Route>
                 <Route path="*" element={<PageNotFound />} />
