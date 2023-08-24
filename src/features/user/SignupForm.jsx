@@ -16,7 +16,7 @@ function SignupForm() {
   useEffect(
     function () {
       if (isLoggedIn) {
-        navigate("/search");
+        navigate("/home");
       }
     },
     [navigate, isLoggedIn]

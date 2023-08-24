@@ -28,7 +28,7 @@ function LoginForm() {
   useEffect(
     function () {
       if (isLoggedIn) {
-        navigate("/search");
+        navigate("/home");
       }
     },
     [navigate, isLoggedIn]
