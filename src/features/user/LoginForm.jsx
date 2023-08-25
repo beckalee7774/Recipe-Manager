@@ -13,7 +13,7 @@ function LoginForm() {
   const [isRefetching2, setIsRefetching2] = useState(false);
   const { isRefetching, refetch } = useLogin({
     userData: {
-      username,
+      username: username.toLowerCase(),
       password,
     },
     setIsRefetching2,

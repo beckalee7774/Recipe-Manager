@@ -134,7 +134,7 @@ function Review({ review }) {
           </div>
         )}
         <textarea
-          className={"mt-1 border-b p-1 w-full overflow-scroll ".concat(
+          className={"mt-1 border-b p-1 w-full overflow-scroll text-orange-600 dark:text-orange-200 ".concat(
             notesCss
           )}
           value={notes}

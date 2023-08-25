@@ -27,7 +27,7 @@ function SignupForm() {
     if (!username || !password) {
       toast.error("Enter both username and password");
     }
-    signup({ user: { username, password, name } });
+    signup({ user: { username: username.toLowerCase(), password, name } });
   }
   return (
     <>

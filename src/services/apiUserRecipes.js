@@ -427,7 +427,7 @@ export async function getUsers({ search, userId }) {
   let { data: users, error } = await supabase
     .from("users")
     .select("*")
-    .eq("name", search)
+    .ilike("username", `%${search}%`)
     .neq("id", userId);
   if (error) throw new Error("error getting users");
   return users;

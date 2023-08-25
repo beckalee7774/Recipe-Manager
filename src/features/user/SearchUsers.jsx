@@ -9,7 +9,7 @@ function SearchUsers() {
   const [search, setSearch] = useState("");
   function handleSumbit(e) {
     e.preventDefault();
-    refetch();
+    if (search) refetch();
   }
   const { user } = useCurrentUser();
   const { isRefetching, users, refetch } = useSearchUsers({
@@ -25,7 +25,7 @@ function SearchUsers() {
             htmlFor="search"
             className="text-orange-700 text-sm dark:text-orange-100"
           >
-            Search by Name
+            Search
           </label>
           <input
             id="search"
@@ -39,7 +39,7 @@ function SearchUsers() {
       {users?.length === 0 && <span>No Results found</span>}
       {users?.length !== 0 && users && (
         <List
-          title="User Results"
+          title={`${users.length} ${users.length === 1 ? "Result" : "Results"}`}
           list={users}
           render={(searchedUser) => (
             <OtherUserRow

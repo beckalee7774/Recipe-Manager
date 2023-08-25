@@ -23,7 +23,7 @@ function UserOptions() {
     if (
       !isUploadingPhoto &&
       data.name === user.name &&
-      data.username === user.username &&
+      data.username.toLowerCase() === user.username &&
       data.password === user.password
     ) {
       toast.error("To submit changes please update a field");
@@ -31,13 +31,13 @@ function UserOptions() {
       const userToUpdate = isUploadingPhoto
         ? {
             name: data.name,
-            username: data.username,
+            username: data.username.toLowerCase(),
             password: data.password,
             avatar: data.avatar,
           }
         : {
             name: data.name,
-            username: data.username,
+            username: data.username.toLowerCase(),
             password: data.password,
           };
       updateUser(

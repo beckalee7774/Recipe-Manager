@@ -52,7 +52,7 @@ function UserProfile({ home = false, userId = null }) {
             render={(review) => (
               <SharedReview review={review} key={review.id} />
             )}
-            listStyle="list-none bg-orange-100 max-w-md mx-[auto] dark:bg-orange-700"
+            listStyle="list-none bg-orange-100 max-w-md mx-[auto] dark:bg-orange-700 overflow-scroll max-h-screen"
           />
         )}
       </div>

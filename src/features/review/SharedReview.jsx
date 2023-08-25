@@ -94,7 +94,7 @@ function SharedReview({ review, userNameIsLink = false }) {
       </div>
       <textarea
         className={
-          "mt-1 p-1 w-full overflow-scroll bg-orange-100 dark:bg-orange-700"
+          "mt-1 p-1 w-full overflow-scroll bg-orange-100 dark:bg-orange-700 text-orange-600 dark:text-orange-200"
         }
         value={review.notes}
         disabled={true}
