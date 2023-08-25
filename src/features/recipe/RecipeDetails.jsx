@@ -110,6 +110,7 @@ function RecipeDetails() {
           title="Ingredients 🧂"
           list={recipeInfo.extendedIngredients}
           render={(ingredient, i) => <li key={i}>{ingredient.original}</li>}
+          listStyle="list-disc px-2"
         />
 
         {recipeInfo.analyzedInstructions[0] && (
@@ -119,6 +120,7 @@ function RecipeDetails() {
             render={(instruction) => (
               <li key={instruction.number}>{instruction.step}</li>
             )}
+            listStyle="list-disc px-2"
           />
         )}
       </div>

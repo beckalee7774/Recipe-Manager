@@ -20,7 +20,7 @@ function FollowingList() {
           key={followingId}
         />
       )}
-      listStyle="list-none"
+      listStyle="list-none px-2"
     />
   );
 }
