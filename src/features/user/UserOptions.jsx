@@ -6,6 +6,7 @@ import DeleteAccount from "./DeleteAccount";
 import FormRow from "../../ui/FormRow";
 import Spinner from "../../ui/Spinner";
 import { useUpdateUser } from "./useUpdateUser";
+import { toast } from "react-hot-toast";
 
 function UserOptions() {
   const { user } = useCurrentUser();
@@ -19,30 +20,39 @@ function UserOptions() {
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   if (isUpdating) return <Spinner />;
   function onSubmit(data) {
-    const userToUpdate = isUploadingPhoto
-      ? {
-          name: data.name,
-          username: data.username,
-          password: data.password,
-          avatar: data.avatar,
-        }
-      : {
-          name: data.name,
-          username: data.username,
-          password: data.password,
-        };
-    updateUser(
-      {
-        user: userToUpdate,
-        userId: user.id,
-        oldImage: user.avatar,
-      },
-      {
-        onSuccess: () => {
-          setIsUploadingPhoto(false);
+    if (
+      !isUploadingPhoto &&
+      data.name === user.name &&
+      data.username === user.username &&
+      data.password === user.password
+    ) {
+      toast.error("To submit changes please update a field");
+    } else {
+      const userToUpdate = isUploadingPhoto
+        ? {
+            name: data.name,
+            username: data.username,
+            password: data.password,
+            avatar: data.avatar,
+          }
+        : {
+            name: data.name,
+            username: data.username,
+            password: data.password,
+          };
+      updateUser(
+        {
+          user: userToUpdate,
+          userId: user.id,
+          oldImage: user.avatar,
         },
-      }
-    );
+        {
+          onSuccess: () => {
+            setIsUploadingPhoto(false);
+          },
+        }
+      );
+    }
   }
   function handleReset(e) {
     e.preventDefault();
@@ -117,7 +127,7 @@ function UserOptions() {
             <input
               id="username"
               minLength={5}
-              className="p-1 rounded-full dark:text-orange-800"
+              className="p-1 rounded-full dark:text-orange-800 lowercase"
               {...register("username")}
             />
           </FormRow>

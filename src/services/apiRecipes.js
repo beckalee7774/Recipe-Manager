@@ -1,12 +1,15 @@
 //api requests to spoontacular api
 const APIKEY = import.meta.env.VITE_SPOONTACULAR_API_KEY;
 export async function searchRecipes({ search, searchByIngredients }) {
-  console.log(import.meta.env);
-  var searchString = search.replace(" ", "&");
-  var fetchString = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&query=${searchString}`;
+  var searchString;
+  var fetchString;
   if (searchByIngredients) {
-    searchString = search.replace(" ", "+");
+    searchString = search.replaceAll(", ", ",+");
+    searchString = searchString.replaceAll(" ", "");
     fetchString = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${APIKEY}&ingredients=${searchString}&ignorePantry=true`;
+  } else {
+    searchString = search.replaceAll(" ", "&");
+    fetchString = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${APIKEY}&query=${searchString}`;
   }
   try {
     const res = await fetch(fetchString);

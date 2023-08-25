@@ -38,9 +38,10 @@ function LoginForm() {
     e.preventDefault();
     if (!username || !password) {
       toast.error("Enter both username and password");
+    } else {
+      refetch();
+      setIsRefetching2(true);
     }
-    refetch();
-    setIsRefetching2(true);
   }
   return (
     <>
@@ -51,6 +52,7 @@ function LoginForm() {
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            className="lowercase"
           />
         </FormRow>
         <FormRow label="password">

@@ -6,7 +6,7 @@ import Spinner from "./Spinner";
 function CheckFollow() {
   const { id } = useParams();
   const { isLoading, user } = useUser({ userId: id });
-  if (isLoading) return Spinner;
+  if (isLoading) return <Spinner />;
   return (
     <div className="dark:bg-orange-900 p-2 h-screen m-3 bg-orange-300">
       <BackButton />

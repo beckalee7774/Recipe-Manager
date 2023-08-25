@@ -19,12 +19,6 @@ export async function getUserReviews({ userId, sortby, filter, isProfile }) {
     query = query.eq("share", true);
   }
   let { data: userRecipes, error } = await query;
-  // let { data: userRecipes, error } = await supabase
-  //   .from("user-recipes")
-  //   .select("*")
-  //   .eq("status", "review")
-  //   .eq("userId", userId)
-  //   .order(sortbyValue, { ascending: ascending });
   if (error) {
     console.log(error);
     throw new Error("error getting user Reviews");

@@ -13,11 +13,14 @@ function SharedReview({ review, userNameIsLink = false }) {
   const { isLoading: isLoading2, userRecipe } = useUserRecipe({
     recipeId: review.recipeId,
   });
-  const layoutStringSidebar = sidebarIsOpen ? "flex-col" : "gap-3";
   if (isLoading || isLoading2) return <Spinner />;
   return (
-    <li className="p-1 mb-4 text-orange-600 dark:text-orange-100">
-      <header className="flex gap-2 items-center mb-2">
+    <li className=" text-orange-600 dark:text-orange-100 dark:bg-orange-700">
+      <header
+        className={`dark:bg-orange-600 dark:text-orange-100 bg-orange-400 text-orange-800 flex gap-3 items-center p-1 ${
+          sidebarIsOpen && "xs:flex-row flex-col"
+        } `}
+      >
         {userNameIsLink ? (
           <Link to={`/user/${user.id}`} className="flex items-center gap-2">
             <img
@@ -58,9 +61,11 @@ function SharedReview({ review, userNameIsLink = false }) {
           className="w-16"
         />
         <div
-          className={layoutStringSidebar.concat(
-            " flex sm:gap-0 sm:grid sm:grid-cols-[1fr_1fr] sm:items-center sm:justify-center"
-          )}
+          className={`${
+            sidebarIsOpen
+              ? "grid grid-rows-[1fr_1fr] gap-2 p-2"
+              : "grid grid-cols-[1fr_1fr] gap-4"
+          } xs:gap-0 xs:grid xs:grid-cols-[1fr_1fr] xs:grid-rows-1 xs:items-center xs:justify-center`}
         >
           <div className="flex flex-col items-center">
             <StarRating
@@ -89,7 +94,7 @@ function SharedReview({ review, userNameIsLink = false }) {
       </div>
       <textarea
         className={
-          "mt-1 border-b p-1 w-full overflow-scroll border-orange-500 bg-orange-100 dark:bg-orange-600"
+          "mt-1 p-1 w-full overflow-scroll bg-orange-100 dark:bg-orange-700"
         }
         value={review.notes}
         disabled={true}

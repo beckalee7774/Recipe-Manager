@@ -13,7 +13,6 @@ function RecipeDetails() {
   const { isLoading, recipeInfo } = useRecipeInfo();
   const { isAdding, addTodo } = useAddTodo({ userId: user.id });
   if (isLoading || isAdding) return <Spinner />;
-  console.log(recipeInfo);
   function handleTodo(e) {
     e.preventDefault();
     addTodo(

@@ -40,6 +40,7 @@ function SignupForm() {
             id="username"
             minLength={5}
             value={username}
+            className="lowercase"
             onChange={(e) => setUsername(e.target.value)}
           />
         </FormRow>
