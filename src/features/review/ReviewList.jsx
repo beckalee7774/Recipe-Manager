@@ -24,7 +24,7 @@ function ReviewList() {
         <Sortby />
         <Filter />
       </div>
-      <ul className="dark:bg-orange-700 dark:text-orange-200 bg-orange-100 p-2 text-orange-600">
+      <ul className="dark:bg-neutral-800 dark:text-orange-200 bg-orange-100 p-2 text-orange-600">
         {reviews.map((review) => (
           <Review review={review} key={review.id} />
         ))}

@@ -14,7 +14,7 @@ function Header() {
   }
 
   return (
-    <div className="bg-orange-100 dark:bg-orange-600 p-2 flex justify-between">
+    <div className="bg-orange-100 dark:bg-neutral-700 p-2 flex justify-between">
       <div className="flex gap-2">
         {!sidebarIsOpen && (
           <button onClick={() => setSidebarIsOpen(true)}>

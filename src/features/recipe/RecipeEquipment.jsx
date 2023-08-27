@@ -12,7 +12,7 @@ function RecipeEquipment() {
       </h1>
     );
   return (
-    <div className="bg-white p-2 rounded-md dark:bg-orange-700">
+    <div className="bg-white p-2 rounded-md dark:bg-neutral-800">
       <div>
         <ul>
           {equipment.equipment.map((equipment, index) => (

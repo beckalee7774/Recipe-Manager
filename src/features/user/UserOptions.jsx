@@ -7,6 +7,7 @@ import FormRow from "../../ui/FormRow";
 import Spinner from "../../ui/Spinner";
 import { useUpdateUser } from "./useUpdateUser";
 import { toast } from "react-hot-toast";
+import { useDarkMode } from "../../contexts/DarkModeContext";
 
 function UserOptions() {
   const { user } = useCurrentUser();
@@ -14,7 +15,7 @@ function UserOptions() {
     defaultValues: user,
   });
   const { errors } = formState;
-  const [darkmode, setDarkMode] = useState();
+  const { isDarkMode, setIsDarkMode } = useDarkMode();
   const [showPassword, setShowPassword] = useState(false);
   const { isUpdating, updateUser } = useUpdateUser();
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
@@ -61,9 +62,9 @@ function UserOptions() {
   function handleDarkMode() {
     document.documentElement.classList.toggle("dark");
     if (document.documentElement.classList.contains("dark")) {
-      setDarkMode(true);
+      setIsDarkMode(true);
     } else {
-      setDarkMode(false);
+      setIsDarkMode(false);
     }
   }
   return (
@@ -72,11 +73,11 @@ function UserOptions() {
         onClick={handleDarkMode}
         className="dark:bg-orange-400 bg-orange-800 text-orange-200 p-2 rounded-full hover:bg-orange-700 absolute top-[-40px] right-2"
       >
-        {darkmode ? <BsSun /> : <BsFillMoonFill />}
+        {isDarkMode ? <BsSun /> : <BsFillMoonFill />}
       </button>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-orange-100 p-3 dark:bg-orange-700"
+        className="bg-orange-100 p-3 dark:bg-neutral-800"
       >
         <div className="flex flex-col gap-3 mb-4 ">
           <img
@@ -149,13 +150,13 @@ function UserOptions() {
             </FormRow>
             <button
               onClick={handleReset}
-              className="text-xs dark:bg-orange-600 bg-orange-200 px-2 py-1 rounded-full hover:bg-orange-300 dark:hover:bg-orange-700"
+              className="text-xs dark:bg-orange-500 bg-orange-200 px-2 py-1 rounded-full hover:bg-orange-300 dark:hover:bg-orange-700"
             >
               Reset
             </button>
           </div>
         </div>
-        <button className="dark:bg-orange-600 bg-orange-800 text-orange-200 p-2 rounded-full text-xs hover:bg-orange-700 dark:hover:bg-orange-700 ">
+        <button className="dark:bg-orange-500 bg-orange-800 text-orange-200 p-2 rounded-full text-xs hover:bg-orange-700 dark:hover:bg-orange-700 ">
           submit changes
         </button>
       </form>

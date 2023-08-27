@@ -24,6 +24,7 @@ import Home from "./pages/Home";
 import FollowersList from "./features/user/FollowersList";
 import CheckFollow from "./ui/CheckFollow";
 import FollowingList from "./features/user/FollowingList";
+import { DarkModeProvider } from "./contexts/DarkModeContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,48 +37,50 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
-      <SidebarProvider>
-        <UserProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route element={<LoggedOutLayout />}>
-                <Route index element={<Navigate replace to="login" />} />
-                <Route path="login" element={<Login />} />
-                <Route path="signup" element={<Signup />} />
-              </Route>
-              <Route
-                element={
-                  <ProtectedRoute>
-                    <AppLayout />
-                  </ProtectedRoute>
-                }
-              >
-                <Route index element={<Navigate replace to="home" />} />
-                <Route path="search" element={<SearchRecipes />} />
-                <Route path="recipe/:id" element={<Recipe />} />
-                <Route path="recipe/nutrition/:id" element={<Nutrition />} />
-                <Route path="recipe/equipment/:id" element={<Equipment />} />
-                <Route path="reviews" element={<ReviewRecipes />} />
-                <Route path="todo" element={<TodoRecipes />} />
-                <Route path="settings" element={<UserSettings />} />
-                <Route path="search-users" element={<SearchUsersPage />} />
-                <Route path="feed" element={<Feed />} />
-                <Route path="user/:id" element={<UserPage />} />
-                <Route path="home" element={<Home />} />
-                <Route element={<CheckFollow />}>
-                  <Route
-                    index
-                    element={<Navigate replace to="followers/:id" />}
-                  />
-                  <Route path="followers/:id" element={<FollowersList />} />
-                  <Route path="following/:id" element={<FollowingList />} />
+      <DarkModeProvider>
+        <SidebarProvider>
+          <UserProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route element={<LoggedOutLayout />}>
+                  <Route index element={<Navigate replace to="login" />} />
+                  <Route path="login" element={<Login />} />
+                  <Route path="signup" element={<Signup />} />
                 </Route>
-                <Route path="*" element={<PageNotFound />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </UserProvider>
-      </SidebarProvider>
+                <Route
+                  element={
+                    <ProtectedRoute>
+                      <AppLayout />
+                    </ProtectedRoute>
+                  }
+                >
+                  <Route index element={<Navigate replace to="home" />} />
+                  <Route path="search" element={<SearchRecipes />} />
+                  <Route path="recipe/:id" element={<Recipe />} />
+                  <Route path="recipe/nutrition/:id" element={<Nutrition />} />
+                  <Route path="recipe/equipment/:id" element={<Equipment />} />
+                  <Route path="reviews" element={<ReviewRecipes />} />
+                  <Route path="todo" element={<TodoRecipes />} />
+                  <Route path="settings" element={<UserSettings />} />
+                  <Route path="search-users" element={<SearchUsersPage />} />
+                  <Route path="feed" element={<Feed />} />
+                  <Route path="user/:id" element={<UserPage />} />
+                  <Route path="home" element={<Home />} />
+                  <Route element={<CheckFollow />}>
+                    <Route
+                      index
+                      element={<Navigate replace to="followers/:id" />}
+                    />
+                    <Route path="followers/:id" element={<FollowersList />} />
+                    <Route path="following/:id" element={<FollowingList />} />
+                  </Route>
+                  <Route path="*" element={<PageNotFound />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </UserProvider>
+        </SidebarProvider>
+      </DarkModeProvider>
       <Toaster
         position="top-center"
         gutter={12}

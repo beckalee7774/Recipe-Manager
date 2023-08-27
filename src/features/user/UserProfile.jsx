@@ -18,7 +18,7 @@ function UserProfile({ home = false, userId = null }) {
   return (
     <div className="max-w-xl mx-[auto] p-3">
       {!home && <BackButton />}
-      <div className="bg-orange-300 dark:bg-orange-900 text-center p-2 flex flex-col items-center gap-1">
+      <div className="bg-orange-300 dark:bg-neutral-950 text-center p-2 flex flex-col items-center gap-1">
         <h1 className="text-xl">{user?.name}</h1>
         <span className="text-xs">{user?.username}</span>
         <img
@@ -52,7 +52,7 @@ function UserProfile({ home = false, userId = null }) {
             render={(review) => (
               <SharedReview review={review} key={review.id} />
             )}
-            listStyle="list-none bg-orange-100 max-w-md mx-[auto] dark:bg-orange-700 overflow-scroll max-h-screen"
+            listStyle="list-none bg-orange-100 max-w-md mx-[auto] overflow-scroll max-h-screen"
           />
         )}
       </div>

@@ -28,8 +28,8 @@ function Review({ review }) {
   const { isUpdating, updateReview } = useUpdateReview({ userId: user.id });
   const inputRef = useRef(null);
   const notesCss = isEditing
-    ? " border-slate-500 bg-slate-50 p-1 text-slate-500 focus:outline-none focus:ring focus:ring-orange-400"
-    : " border-orange-500 bg-orange-100 dark:bg-orange-600";
+    ? " border-slate-500 bg-slate-50 p-1 text-slate-500 dark:text-slate-500 focus:outline-none focus:ring focus:ring-orange-400"
+    : " border-orange-500 bg-orange-100 dark:bg-neutral-700";
   useEffect(
     function () {
       if (isEditing) {

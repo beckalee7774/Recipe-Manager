@@ -5,7 +5,7 @@ function RecipeNutrition() {
   const { isLoading, nutritionInfo } = useNutritionInfo();
   if (isLoading) return <Spinner />;
   return (
-    <div className="flex flex-col bg-orange-50 p-2 rounded-md text-slate-600 text-sm dark:bg-orange-700">
+    <div className="flex flex-col bg-orange-50 p-2 rounded-md text-slate-600 text-sm dark:bg-neutral-800">
       {nutritionInfo.nutrients.map((nutrient, i) => (
         <span
           key={i}

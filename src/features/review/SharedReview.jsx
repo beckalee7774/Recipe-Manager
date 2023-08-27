@@ -15,9 +15,9 @@ function SharedReview({ review, userNameIsLink = false }) {
   });
   if (isLoading || isLoading2) return <Spinner />;
   return (
-    <li className=" text-orange-600 dark:text-orange-100 dark:bg-orange-700">
+    <li className=" text-orange-600 dark:text-orange-100 dark:bg-neutral-800">
       <header
-        className={`dark:bg-orange-600 dark:text-orange-100 bg-orange-400 text-orange-800 flex gap-3 items-center p-1 ${
+        className={`dark:bg-neutral-700 dark:text-orange-100 bg-orange-400 text-orange-800 flex gap-3 items-center p-1 ${
           sidebarIsOpen && "xs:flex-row flex-col"
         } `}
       >
@@ -50,7 +50,7 @@ function SharedReview({ review, userNameIsLink = false }) {
         )}
         <span>{format(parseISO(review.created_at), "eeee do MMM, yyyy")}</span>
       </header>
-      <div className="grid grid-cols-[minmax(70px,_auto)_1fr_auto] gap-2 items-center">
+      <div className="grid grid-cols-[minmax(70px,_auto)_1fr_auto] gap-2 items-center ">
         <img
           src={
             review.image
@@ -94,7 +94,7 @@ function SharedReview({ review, userNameIsLink = false }) {
       </div>
       <textarea
         className={
-          "mt-1 p-1 w-full overflow-scroll bg-orange-100 dark:bg-orange-700 text-orange-600 dark:text-orange-200"
+          "mt-1 p-1 w-full overflow-scroll bg-orange-100 dark:bg-neutral-800 text-orange-600 dark:text-orange-200"
         }
         value={review.notes}
         disabled={true}

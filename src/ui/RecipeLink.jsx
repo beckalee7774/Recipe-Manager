@@ -6,7 +6,7 @@ function RecipeLink({ sourceUrl, sourceName, size }) {
       target="_blank"
       rel="noreferrer"
       className={sizeString.concat(
-        " font-semibold hover:text-orange-400 dark:hover:text-orange-400 dark:text-orange-100 text-orange-600"
+        " font-semibold hover:text-orange-400 dark:hover:text-orange-400 dark:text-orange-200 text-orange-600"
       )}
     >
       Link on {sourceName} &rarr;

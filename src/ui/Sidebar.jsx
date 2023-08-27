@@ -14,7 +14,7 @@ import { useSidebar } from "../contexts/SidebarContext";
 function Sidebar() {
   const { setSidebarIsOpen } = useSidebar();
   return (
-    <aside className="bg-orange-400 dark:bg-orange-700 row-span-2 p-1 border-r border-slate-100 relative">
+    <aside className="bg-orange-400 dark:bg-neutral-800 row-span-2 p-1 border-r border-slate-100 relative">
       <button
         onClick={() => setSidebarIsOpen(false)}
         className="m-0 absolute top-0 left-2 text-xl"

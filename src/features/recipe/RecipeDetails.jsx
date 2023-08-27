@@ -105,7 +105,7 @@ function RecipeDetails() {
         sourceUrl={recipeInfo.sourceUrl}
         sourceName={recipeInfo.sourceName}
       />
-      <div className="bg-orange-100 p-2 flex flex-col gap-4 dark:bg-orange-700">
+      <div className="bg-orange-100 p-2 flex flex-col gap-4 dark:bg-neutral-800">
         <List
           title="Ingredients 🧂"
           list={recipeInfo.extendedIngredients}

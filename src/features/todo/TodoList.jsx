@@ -16,7 +16,7 @@ function TodoList() {
       </div>
     );
   return (
-    <ul className=" text-orange-600 bg-orange-100 p-2 max-w-md mx-[auto] dark:bg-orange-700 dark:text-orange-200">
+    <ul className=" text-orange-600 bg-orange-100 p-2 max-w-md mx-[auto] dark:bg-neutral-800 dark:text-orange-200">
       {todos.map((todo) => (
         <Todo todo={todo} key={todo.id} />
       ))}

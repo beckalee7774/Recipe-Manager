@@ -48,7 +48,7 @@ function SearchUsers() {
               key={searchedUser.id}
             />
           )}
-          listStyle="list-none p-2 bg-orange-100 dark:bg-orange-700"
+          listStyle="list-none p-2 bg-orange-100 dark:bg-neutral-800"
         />
       )}
     </div>

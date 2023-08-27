@@ -23,7 +23,7 @@ function UserFeed() {
         render={(review) => (
           <SharedReview review={review} key={review.id} userNameIsLink={true} />
         )}
-        listStyle="list-none bg-orange-100 max-w-md mx-[auto] dark:bg-orange-700"
+        listStyle="list-none bg-orange-100 max-w-md mx-[auto]"
       />
     </div>
   );

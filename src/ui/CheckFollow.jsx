@@ -8,7 +8,7 @@ function CheckFollow() {
   const { isLoading, user } = useUser({ userId: id });
   if (isLoading) return <Spinner />;
   return (
-    <div className="dark:bg-orange-900 p-2 h-screen m-3 bg-orange-300">
+    <div className="dark:bg-neutral-800 p-2 h-screen m-3 bg-orange-300">
       <BackButton />
       <div className="flex flex-col items-center gap-1">
         <span className="text-center text-sm">{user.username}</span>
