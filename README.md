@@ -29,3 +29,9 @@ Built with React and Vite for a seamless and delightful cooking experience.
 - **Social Cooking**: Connect with friends who are also part of the community and explore their culinary creations.
 
 Embark on a culinary journey with our Recipe Manager. Embrace your inner chef, curate your culinary inspirations, and share your love for food with fellow enthusiasts. Start your gastronomic adventure today!
+
+access site at:https://recipe-manager-rebecca-lee.netlify.app
+
+use can use the test user:
+username: beckalee7774
+password: passwordtest

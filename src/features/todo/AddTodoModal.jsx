@@ -52,7 +52,7 @@ function AddTodoModal({}) {
       </button>
       {modalIsOpen && (
         <div className="fixed top-0 left-0 w-screen h-screen backdrop-blur-sm">
-          <div className="fixed bg-orange-100 top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%] p-4 w-5/6">
+          <div className="fixed bg-orange-100 dark:bg-neutral-800 top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%] p-4 w-5/6">
             <button
               onClick={() => {
                 reset();
@@ -75,6 +75,7 @@ function AddTodoModal({}) {
                   {...register("title", {
                     required: "this field is required",
                   })}
+                  className="dark:text-orange-800"
                 />
               </FormRow>
               <FormRow label="image" error={errors?.image?.message}>
@@ -93,6 +94,7 @@ function AddTodoModal({}) {
                   {...register("sourceUrl", {
                     required: "this field is required",
                   })}
+                  className="dark:text-orange-800"
                 />
               </FormRow>
               <FormRow label="sourceName" error={errors?.sourceName?.message}>
@@ -102,6 +104,7 @@ function AddTodoModal({}) {
                   {...register("sourceName", {
                     required: "this field is required",
                   })}
+                  className="dark:text-orange-800"
                 />
               </FormRow>
               <button className="hover:bg-orange-200 bg-orange-300 text-orange-900 p-2 rounded-full">

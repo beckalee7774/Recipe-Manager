@@ -90,13 +90,12 @@ function AddReviewModal({
       </button>
       {modalIsOpen && (
         <div className="fixed top-0 left-0 w-screen h-screen backdrop-blur-sm">
-          <div className="fixed bg-orange-100 top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%] p-4 w-5/6">
+          <div className="fixed bg-orange-100 dark:bg-neutral-800 top-1/2 left-1/2 translate-y-[-50%] translate-x-[-50%] p-4 w-5/6">
             <button
               onClick={() => {
                 reset();
                 setModalIsOpen(false);
               }}
-              className=""
             >
               X
             </button>
@@ -113,6 +112,7 @@ function AddReviewModal({
                   {...register("title", {
                     required: "this field is required",
                   })}
+                  className="dark:text-orange-800"
                 />
               </FormRow>
               {todoExists && (
@@ -121,6 +121,7 @@ function AddReviewModal({
                   onChange={(e) => {
                     setKeepOldPhoto(e.target.value === "true");
                   }}
+                  className="dark:text-orange-800"
                 >
                   <option value={true}>Keep old photo</option>
                   <option value={false}>add new photo photo</option>
@@ -146,6 +147,7 @@ function AddReviewModal({
                   {...register("sourceUrl", {
                     required: "this field is required",
                   })}
+                  className="dark:text-orange-800"
                 />
               </FormRow>
               <FormRow label="sourceName" error={errors?.sourceName?.message}>
@@ -155,6 +157,7 @@ function AddReviewModal({
                   {...register("sourceName", {
                     required: "this field is required",
                   })}
+                  className="dark:text-orange-800"
                 />
               </FormRow>
               <FormRow label="favourite" error={errors?.favourite?.message}>
@@ -180,6 +183,7 @@ function AddReviewModal({
                   id="notes"
                   disabled={isAdding}
                   {...register("notes")}
+                  className="dark:text-orange-800"
                 />
               </FormRow>
               <FormRow label="share" error={errors?.share?.message}>
