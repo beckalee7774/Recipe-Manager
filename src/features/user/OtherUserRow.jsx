@@ -21,6 +21,7 @@ function OtherUserRow({ otherUserID, userId }) {
     followedId: otherUserID,
   });
   if (isLoading || isLoading2 || isLoading3 || isLoading4) return <Spinner />;
+  console.log(otherUser, userFollows)
   return (
     <li className="border-b dark:border-orange-100 border-orange-800 flex p-1 items-center justify-between">
       <Link

@@ -4,7 +4,7 @@ import { checkUserFollows } from "../../services/apiUserRecipes";
 export function useCheckUserFollows({ followerId, followedId }) {
   const { isLoading, data: userFollows } = useQuery({
     queryFn: () => checkUserFollows({ followerId, followedId }),
-    queryKey: ["follows", followerId],
+    queryKey: ["follows", followerId, followedId],
   });
   return { isLoading, userFollows };
 }

@@ -455,6 +455,7 @@ export async function checkUserFollows({ followerId, followedId }) {
     .eq("followerId", followerId)
     .eq("followedId", followedId);
 
+    console.log(data)
   if (error) {
     console.log(error);
     throw new Error("error checking if user follows");

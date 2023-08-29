@@ -10,7 +10,7 @@ export function useFollow({ followerId, followedId }) {
     onSuccess: () => {
       toast.success("Successfully followed");
       queryClient.invalidateQueries({
-        queryKey: ["follows", followerId],
+        queryKey: ["follows", followerId, followedId],
       });
       queryClient.invalidateQueries({
         queryKey: ["following", followerId],

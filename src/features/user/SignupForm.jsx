@@ -40,6 +40,7 @@ function SignupForm() {
             id="username"
             minLength={5}
             value={username}
+            disabled={isSigningUp}
             className="lowercase"
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -48,6 +49,7 @@ function SignupForm() {
           <input
             id="password"
             value={password}
+            disabled={isSigningUp}
             onChange={(e) => setPassword(e.target.value)}
           />
         </FormRow>
@@ -55,6 +57,7 @@ function SignupForm() {
           <input
             id="name"
             value={name}
+            disabled={isSigningUp}
             onChange={(e) => setName(e.target.value)}
           />
         </FormRow>

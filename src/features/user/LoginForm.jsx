@@ -51,6 +51,7 @@ function LoginForm() {
           <input
             id="username"
             value={username}
+            disabled={isRefetching2}
             onChange={(e) => setUsername(e.target.value)}
             className="lowercase"
           />
@@ -60,6 +61,7 @@ function LoginForm() {
             id="password"
             type="password"
             value={password}
+            disabled={isRefetching2}
             onChange={(e) => setPassword(e.target.value)}
           />
         </FormRow>

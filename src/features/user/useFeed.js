@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getFeed } from "../../services/apiUserRecipes";
 import { subDays } from "date-fns";
-export const feedLastDays = 20;
+export const feedLastDays = 50;
 export function useFeed({ userId }) {
   const { isLoading, data: feed } = useQuery({
     queryFn: () =>

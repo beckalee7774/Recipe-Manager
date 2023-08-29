@@ -32,6 +32,6 @@ Embark on a culinary journey with our Recipe Manager. Embrace your inner chef, c
 
 access site at:https://recipe-manager-rebecca-lee.netlify.app
 
-use can use the test user:
+you can use the test user:
 username: beckalee7774
 password: passwordtest

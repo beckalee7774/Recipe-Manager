@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { searchRecipes } from "../../services/apiRecipes";
 
-export function useSearch({ search, searchByIngredients }) {
+export function useSearch({ search, searchByIngredients, userId }) {
   const {
     isLoading,
     data: recipes,
     error,
     refetch,
   } = useQuery({
-    queryKey: ["recipes"],
+    queryKey: ["recipes", userId],
     queryFn: () => searchRecipes({ search, searchByIngredients }),
     enabled: false,
   });

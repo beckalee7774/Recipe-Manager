@@ -1,13 +1,16 @@
 import { useState } from "react";
 import RecipeSearchList from "./RecipeSearchList";
 import { useSearch } from "./useSearch";
+import { useCurrentUser } from "../../contexts/UserContext";
 
 function Search() {
   const [search, setSearch] = useState("");
+  const {user} = useCurrentUser();
   const [searchByIngredients, setSearchByIngredients] = useState(false);
   const { recipes, refetch } = useSearch({
     search: search.trim(),
     searchByIngredients,
+    userId: user.id,
   });
   function handleSubmit(e) {
     e.preventDefault();
@@ -31,7 +34,7 @@ function Search() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div className="text-xs flex gap-2 items-center mt-4">
+        <div className="text-xs flex gap-2 items-center my-4">
           <label htmlFor="searchByIngredients">Search By Ingredients?</label>
           <input
             type="checkbox"
@@ -52,13 +55,16 @@ function Search() {
           </span>
         )}
       </span>
-      {recipes?.length > 0 ? (
-        <RecipeSearchList recipes={recipes} />
-      ) : (
-        <p className="dark:text-orange-200 text-xs uppercase text-orange-600 mt-5 font-semibold">
-          To start please search the database
-        </p>
-      )}
+      {recipes?.length > 0 && <RecipeSearchList recipes={recipes} />}
+      {recipes === undefined && 
+        <>
+          <p className="dark:text-orange-200 text-xs uppercase text-orange-600 mt-5 font-semibold">
+            To start please search the database
+          </p>
+          <span className = "text-xs">Note that only 150 requests to the api may be made by all users in one day. If this isn&apos;t working try again tomorrow.</span>
+        </>
+      }
+      {recipes?.length === 0 && <span className = "mt-5">No results found</span>}
     </>
   );
 }

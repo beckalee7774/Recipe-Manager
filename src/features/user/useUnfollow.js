@@ -9,7 +9,7 @@ export function useUnfollow({ followerId, followedId }) {
     onSuccess: () => {
       toast.success("Successfully unfollowed");
       queryClient.invalidateQueries({
-        queryKey: ["follows", followerId],
+        queryKey: ["follows", followerId, followedId],
       });
       queryClient.invalidateQueries({
         queryKey: ["following", followerId],
