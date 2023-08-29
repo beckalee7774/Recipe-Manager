@@ -5,6 +5,8 @@ import {
   BsFillHeartFill,
   BsHeart,
   BsFillSendFill,
+  BsBookmarkHeartFill,
+  BsBookmarkHeart,
 } from "react-icons/bs";
 import { useCurrentUser } from "../../contexts/UserContext";
 import Spinner from "../../ui/Spinner";
@@ -39,7 +41,7 @@ function ReviewOperations({
           })
         }
       >
-        {review.favourite ? <BsFillHeartFill /> : <BsHeart />}
+        {review.favourite ? <BsBookmarkHeartFill /> : <BsBookmarkHeart />}
       </button>
 
       <button

@@ -6,6 +6,12 @@ import Spinner from "../../ui/Spinner";
 import StarRating from "../../ui/StarRating";
 import { useUser } from "../user/useUser";
 import { useUserRecipe } from "./useUserRecipe";
+import { BsFillHeartFill, BsHeart } from "react-icons/bs";
+import { useCheckLike } from "./useCheckLike";
+import { useCurrentUser } from "../../contexts/UserContext";
+import { useToggleLikeReview } from "./useToggleLikeReview";
+import { useLikes } from "./useLikes";
+import LikesModal from "../../ui/LikesModal";
 //what is displayed in feed and user profile
 function SharedReview({ review, userNameIsLink = false }) {
   const { isLoading, user } = useUser({ userId: review.userId });
@@ -13,14 +19,17 @@ function SharedReview({ review, userNameIsLink = false }) {
   const { isLoading: isLoading2, userRecipe } = useUserRecipe({
     recipeId: review.recipeId,
   });
-  if (isLoading || isLoading2) return <Spinner />;
+  const { isToggling, toggleLikeReview } = useToggleLikeReview();
+  const { user: currentUser } = useCurrentUser();
+  const { isLoading: isLoading3, liked } = useCheckLike({
+    userId: currentUser.id,
+    reviewId: review.id,
+  });
+  const { isLoading: isLoading4, likes } = useLikes({ reviewId: review.id });
+  if (isLoading || isLoading2 || isLoading3 || isLoading4) return <Spinner />;
   return (
     <li className=" text-orange-600 dark:text-orange-100 dark:bg-neutral-800">
-      <header
-        className={`dark:bg-neutral-700 dark:text-orange-100 bg-orange-400 text-orange-800 flex gap-3 items-center p-1 ${
-          sidebarIsOpen && "xs:flex-row flex-col"
-        } `}
-      >
+      <header className="dark:bg-neutral-700 dark:text-orange-100 bg-orange-400 text-orange-800 flex gap-3 items-center p-1 justify-between">
         {userNameIsLink ? (
           <Link to={`/user/${user.id}`} className="flex items-center gap-2">
             <img
@@ -48,7 +57,33 @@ function SharedReview({ review, userNameIsLink = false }) {
             <span>{user?.username}</span>
           </div>
         )}
-        <span>{format(parseISO(review.created_at), "eeee do MMM, yyyy")}</span>
+        <>
+          <div className={`${sidebarIsOpen && "hidden s:inline"}`}>
+            <span className="hidden xs:inline">
+              {format(parseISO(review.created_at), "eeee do MMM, yyyy")}
+            </span>
+            <span className="xs:hidden">
+              {format(parseISO(review.created_at), "do MMM")}
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            <LikesModal likes={likes} />
+            {user.id !== currentUser.id && (
+              <button
+                className="text-red-600"
+                disabled={isToggling}
+                onClick={() =>
+                  toggleLikeReview({
+                    userId: currentUser.id,
+                    reviewId: review.id,
+                  })
+                }
+              >
+                {liked ? <BsFillHeartFill /> : <BsHeart />}
+              </button>
+            )}
+          </div>
+        </>
       </header>
       <div className="grid grid-cols-[minmax(70px,_auto)_1fr_auto] gap-2 items-center ">
         <img

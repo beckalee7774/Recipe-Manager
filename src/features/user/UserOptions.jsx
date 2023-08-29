@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { BsSun, BsFillMoonFill, BsUpload } from "react-icons/bs";
+import { BsUpload } from "react-icons/bs";
 import { useCurrentUser } from "../../contexts/UserContext";
 import DeleteAccount from "./DeleteAccount";
 import FormRow from "../../ui/FormRow";
 import Spinner from "../../ui/Spinner";
 import { useUpdateUser } from "./useUpdateUser";
 import { toast } from "react-hot-toast";
-import { useDarkMode } from "../../contexts/DarkModeContext";
+import DarkModeToggle from "../../ui/DarkModeToggle";
 
 function UserOptions() {
   const { user } = useCurrentUser();
@@ -15,7 +15,6 @@ function UserOptions() {
     defaultValues: user,
   });
   const { errors } = formState;
-  const { isDarkMode, setIsDarkMode } = useDarkMode();
   const [showPassword, setShowPassword] = useState(false);
   const { isUpdating, updateUser } = useUpdateUser();
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
@@ -59,22 +58,9 @@ function UserOptions() {
     e.preventDefault();
     reset(user);
   }
-  function handleDarkMode() {
-    document.documentElement.classList.toggle("dark");
-    if (document.documentElement.classList.contains("dark")) {
-      setIsDarkMode(true);
-    } else {
-      setIsDarkMode(false);
-    }
-  }
   return (
     <div className="relative">
-      <button
-        onClick={handleDarkMode}
-        className="dark:bg-orange-400 bg-orange-800 text-orange-200 p-2 rounded-full hover:bg-orange-700 absolute top-[-40px] right-2"
-      >
-        {isDarkMode ? <BsSun /> : <BsFillMoonFill />}
-      </button>
+      <DarkModeToggle />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="bg-orange-100 p-3 dark:bg-neutral-800"
@@ -157,7 +143,7 @@ function UserOptions() {
           </div>
         </div>
         <button className="dark:bg-orange-500 bg-orange-800 text-orange-200 p-2 rounded-full text-xs hover:bg-orange-700 dark:hover:bg-orange-700 ">
-          submit changes
+          save changes
         </button>
       </form>
       <DeleteAccount />

@@ -21,7 +21,6 @@ function OtherUserRow({ otherUserID, userId }) {
     followedId: otherUserID,
   });
   if (isLoading || isLoading2 || isLoading3 || isLoading4) return <Spinner />;
-  console.log(otherUser, userFollows)
   return (
     <li className="border-b dark:border-orange-100 border-orange-800 flex p-1 items-center justify-between">
       <Link
@@ -42,7 +41,7 @@ function OtherUserRow({ otherUserID, userId }) {
           <span className="text-xs">{otherUser.name}</span>
         </div>
       </Link>
-      {userFollows ? (
+      {userFollows && otherUserID !== userId && (
         <button
           className="text-[0.5rem] flex items-center gap-1 bg-teal-100 text-teal-700 px-1 rounded-full dark:bg-teal-800 dark:text-teal-200 hover:bg-teal-200"
           disabled={!userFollows}
@@ -53,7 +52,9 @@ function OtherUserRow({ otherUserID, userId }) {
           <BsPersonDashFill />
           <span>Unfollow</span>
         </button>
-      ) : (
+      )}
+
+      {!userFollows && otherUserID !== userId && (
         <button
           className="text-[0.5rem] flex items-center gap-1 bg-teal-100 text-teal-700 px-1 rounded-full dark:bg-teal-800 dark:text-teal-200 hover:bg-teal-200"
           disabled={userFollows}

@@ -6,7 +6,7 @@ import Heading from "../../ui/Heading";
 import FormRow from "../../ui/FormRow";
 import { useForm } from "react-hook-form";
 
-function AddTodoModal({}) {
+function AddTodoModal() {
   const { user } = useCurrentUser();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const { register, handleSubmit, formState, reset } = useForm({

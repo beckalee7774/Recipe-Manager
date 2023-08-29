@@ -4,7 +4,7 @@ import supabase, { supabaseUrl } from "./supabase";
 export async function getUserReviews({ userId, sortby, filter, isProfile }) {
   const sortbyValue =
     sortby === "recent" || !sortby || sortby === "none" ? "created_at" : sortby;
-  const ascending = sortby === "none" || !sortby ? true : false;
+  const ascending = sortby === "none" || (!sortby && !isProfile) ? true : false;
   let query = supabase
     .from("user-recipes")
     .select("*")
@@ -455,7 +455,6 @@ export async function checkUserFollows({ followerId, followedId }) {
     .eq("followerId", followerId)
     .eq("followedId", followedId);
 
-    console.log(data)
   if (error) {
     console.log(error);
     throw new Error("error checking if user follows");
@@ -544,4 +543,59 @@ export async function getFeed({ userId, date }) {
     throw new Error("error getting user info");
   }
   return data;
+}
+
+export async function getLike({ userId, reviewId }) {
+  const { data, error } = await supabase
+    .from("user-likes-post")
+    .select("*")
+    .eq("userId", userId)
+    .eq("reviewId", reviewId);
+  if (error) {
+    console.log(error);
+    throw new Error("error getting like info");
+  }
+  if (data.length === 0) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+export async function getLikes({ reviewId }) {
+  const { data, error } = await supabase
+    .from("user-likes-post")
+    .select("*")
+    .eq("reviewId", reviewId);
+  if (error) {
+    console.log(error);
+    throw new Error("error getting likes");
+  }
+  return data;
+}
+
+export async function toggleLikeReview({ userId, reviewId }) {
+  if ((await getLike({ userId, reviewId })) === true) {
+    const { error } = await supabase
+      .from("user-likes-post")
+      .delete()
+      .eq("userId", userId)
+      .eq("reviewId", reviewId);
+    if (error) {
+      console.log(error);
+      throw new Error("error unliking review");
+    }
+    return { userId, reviewId };
+  } else {
+    const { error } = await supabase
+      .from("user-likes-post")
+      .insert([{ userId, reviewId }])
+      .select();
+
+    if (error) {
+      console.log(error);
+      throw new Error("error liking review");
+    }
+    return { userId, reviewId };
+  }
 }
