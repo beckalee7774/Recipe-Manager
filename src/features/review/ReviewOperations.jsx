@@ -30,8 +30,12 @@ function ReviewOperations({
         onClick={() => {
           updateShare({ id: review.id, share: !review.share });
         }}
+        className="group relative"
       >
         {review.share ? <BsFillSendFill /> : <BsSend />}
+        <p className="hidden bg-white rounded-md px-1 group-hover:block absolute bottom-4 right-0 text-[0.5rem]">
+          share
+        </p>
       </button>
       <button
         onClick={() =>
@@ -40,8 +44,12 @@ function ReviewOperations({
             favourite: !review.favourite,
           })
         }
+        className="group relative"
       >
         {review.favourite ? <BsBookmarkHeartFill /> : <BsBookmarkHeart />}
+        <p className="hidden bg-white rounded-md px-1 group-hover:block absolute bottom-4 right-0 text-[0.5rem]">
+          favourite
+        </p>
       </button>
 
       <button

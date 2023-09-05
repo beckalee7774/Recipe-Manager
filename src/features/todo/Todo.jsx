@@ -44,7 +44,7 @@ function Todo({ todo }) {
             </Link>
           )}
         </div>
-        <div className="flex flex-col gap-1 items-center">
+        <div className="flex flex-col xs:flex-row gap-3 xs:gap-1 items-center">
           <AddReviewModal
             userRecipe={userRecipe}
             todoExists={true}
@@ -60,10 +60,9 @@ function Todo({ todo }) {
                 image: todo.image,
               });
             }}
-            className="text-[0.5rem] flex items-center gap-1 bg-red-100 text-red-700 px-1 rounded-full dark:bg-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-700"
+            className="text-xs flex items-center gap-1 px-1 rounded-full hover:text-orange-700 dark:hover:text-orange-300"
           >
             <BsTrash3 />
-            <span>Delete</span>
           </button>
         </div>
       </div>
