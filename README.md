@@ -35,3 +35,5 @@ access site at:https://recipe-manager-rebecca-lee.netlify.app
 you can use the test user:
 username: beckalee7774
 password: passwordtest
+
+recommened: Google Chrome
