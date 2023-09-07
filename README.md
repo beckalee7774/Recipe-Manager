@@ -36,4 +36,5 @@ you can use the test user:
 username: beckalee7774
 password: passwordtest
 
-recommened: Google Chrome
+recommended: Google Chrome
+some browsers (safari) may not support fetch which could result in a blank page. HIGHLY recommend Google Chrome as it was the browser used for development
