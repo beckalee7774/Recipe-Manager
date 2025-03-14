@@ -37,7 +37,7 @@ username: beckalee7774
 password: passwordtest
 
 <br />
-## Unfortunately, due to recent updates to Supabase, the app is no longer live (data is unavailable and login will no longer work).
+**Unfortunately, due to recent updates to Supabase, the app is no longer live (data is unavailable and login will no longer work).**
 
 recommended: Google Chrome
 some browsers (safari) may not support fetch which could result in a blank page. HIGHLY recommend Google Chrome as it was the browser used for development
