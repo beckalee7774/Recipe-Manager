@@ -29,14 +29,14 @@ Built with React and Vite for a seamless and delightful cooking experience.
 - **Social Cooking**: Connect with friends who are also part of the community and explore their culinary creations.
 
 Embark on a culinary journey with our Recipe Manager. Embrace your inner chef, curate your culinary inspirations, and share your love for food with fellow enthusiasts. Start your gastronomic adventure today!
-
+<br />
+**Unfortunately, due to recent updates to Supabase, the app is no longer live (data is unavailable and login will no longer work).**
+<br />
 access site at:https://recipe-manager-rebecca-lee.netlify.app 
 
 you can use the test user:
 username: beckalee7774
 password: passwordtest
 
-**Unfortunately, due to recent updates to Supabase, the app is no longer live (data is unavailable and login will no longer work).**
-<br />
 recommended: Google Chrome
 some browsers (safari) may not support fetch which could result in a blank page. HIGHLY recommend Google Chrome as it was the browser used for development
